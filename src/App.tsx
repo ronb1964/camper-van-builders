@@ -333,7 +333,8 @@ const App = () => {
   } = useBuilders({
     // Use Google Sheets data source
     useGoogleSheet: true,
-    googleSheetId: '1gfw9r6opnyf6CFaQQJA_s0bBjHsphnImwaOuEdWpLYU'
+    googleSheetId: '1gfw9r6opnyf6CFaQQJA_s0bBjHsphnImwaOuEdWpLYU',
+    apiKey: getGoogleMapsApiKey() // Explicitly pass the API key
   });
   const scrollToResults = useScrollToResults();
   const { 

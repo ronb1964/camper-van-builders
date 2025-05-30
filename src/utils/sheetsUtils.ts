@@ -10,6 +10,9 @@ export const fetchBuildersFromSheet = async (
   sheetId: string,
   apiKey: string = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''
 ): Promise<Record<string, Builder[]>> => {
+  // Log for debugging (will be removed in production)
+  console.log('Fetching builders from sheet with ID:', sheetId);
+  console.log('API Key available:', apiKey ? 'Yes (length: ' + apiKey.length + ')' : 'No');
   try {
     // Extract sheet ID from URL if full URL is provided
     const extractedSheetId = sheetId.includes('spreadsheets/d/') 

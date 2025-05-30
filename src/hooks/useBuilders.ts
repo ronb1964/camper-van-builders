@@ -12,6 +12,7 @@ interface UseBuilderProps {
   mockBuilders?: Record<string, Builder[]>;
   googleSheetId?: string;
   useGoogleSheet?: boolean;
+  apiKey?: string;
 }
 
 // Mock data for builders if none provided
@@ -33,17 +34,19 @@ const DEFAULT_MOCK_BUILDERS: Record<string, Builder[]> = {
   ]
 };
 
-export const useBuilders = ({
-  selectedState = '',
-  searchTerm = '',
-  priceRange = [0, 200000],
-  selectedTypes = [],
-  selectedAmenities = [],
-  minRating = 0,
-  mockBuilders = DEFAULT_MOCK_BUILDERS,
-  googleSheetId = '',
-  useGoogleSheet = false
-}: UseBuilderProps = {}) => {
+export const useBuilders = (props: UseBuilderProps = {}) => {
+  const {
+    selectedState = '',
+    searchTerm = '',
+    priceRange = [0, 200000],
+    selectedTypes = [],
+    selectedAmenities = [],
+    minRating = 0,
+    mockBuilders = DEFAULT_MOCK_BUILDERS,
+    googleSheetId = '',
+    useGoogleSheet = false,
+    apiKey = ''
+  } = props;
   const [builders, setBuilders] = useState<Builder[]>([]);
   const [filteredBuilders, setFilteredBuilders] = useState<Builder[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,39 +55,38 @@ export const useBuilders = ({
 
   // Fetch data from Google Sheets if enabled
   useEffect(() => {
+    const fetchSheetData = async () => {
+      try {
+        const data = await fetchBuildersFromSheet(googleSheetId, apiKey);
+        
+        // Add pricing tiers to each builder
+        Object.keys(data).forEach(state => {
+          data[state] = data[state].map(builder => {
+            if (!builder.pricingTiers || builder.pricingTiers.length === 0) {
+              builder.pricingTiers = generatePricingTiersForBuilder(builder);
+            }
+            return builder;
+          });
+        });
+        
+        setBuilderData(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching from Google Sheets:', err);
+        setError('Failed to fetch builders from Google Sheets. Using mock data instead.');
+        setBuilderData(mockBuilders);
+        setLoading(false);
+      }
+    };
+
     if (useGoogleSheet && googleSheetId) {
       setLoading(true);
       setError(null);
-      
-      const fetchSheetData = async () => {
-        try {
-          const data = await fetchBuildersFromSheet(googleSheetId);
-          
-          // Add pricing tiers to each builder
-          Object.keys(data).forEach(state => {
-            data[state] = data[state].map(builder => {
-              if (!builder.pricingTiers || builder.pricingTiers.length === 0) {
-                builder.pricingTiers = generatePricingTiersForBuilder(builder);
-              }
-              return builder;
-            });
-          });
-          
-          setBuilderData(data);
-          setLoading(false);
-        } catch (err) {
-          console.error('Error fetching from Google Sheets:', err);
-          setError('Failed to fetch builders from Google Sheets. Using mock data instead.');
-          setBuilderData(mockBuilders);
-          setLoading(false);
-        }
-      };
-      
       fetchSheetData();
     } else {
       setBuilderData(mockBuilders);
     }
-  }, [useGoogleSheet, googleSheetId, mockBuilders]);
+  }, [useGoogleSheet, googleSheetId, mockBuilders, apiKey]);
 
   // Fetch builders when state changes
   useEffect(() => {
