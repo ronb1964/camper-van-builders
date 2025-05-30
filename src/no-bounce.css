@@ -1,0 +1,6 @@
+/* Override any animations on images */
+img {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './no-bounce.css'; // Import no-bounce CSS to prevent animations
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { setupGlobalErrorHandling } from './utils/errorLogger';
