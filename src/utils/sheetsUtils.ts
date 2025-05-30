@@ -27,9 +27,9 @@ export const fetchBuildersFromSheet = async (
       ? sheetId.split('spreadsheets/d/')[1].split('/')[0]
       : sheetId;
     
-    // Fetch the sheet data
+    // Fetch the sheet data - using the correct sheet name 'van'
     const response = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${extractedSheetId}/values/Builders?key=${apiKey}`
+      `https://sheets.googleapis.com/v4/spreadsheets/${extractedSheetId}/values/van?key=${apiKey}`
     );
     
     if (!response.ok) {
