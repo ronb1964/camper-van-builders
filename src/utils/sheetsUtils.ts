@@ -22,18 +22,25 @@ export const fetchBuildersFromSheet = async (
   }
   
   try {
-    // Extract sheet ID from URL if full URL is provided
+    console.log('🔄 Fetching builders from Google Sheet:', sheetId);
+    console.log('🔑 API Key available:', apiKey ? 'Yes' : 'No');
+    
+    // Extract the sheet ID from the URL if a full URL was provided
     const extractedSheetId = sheetId.includes('spreadsheets/d/') 
       ? sheetId.split('spreadsheets/d/')[1].split('/')[0]
       : sheetId;
+    console.log('📝 Extracted Sheet ID:', extractedSheetId);
     
-    // Fetch the sheet data - using the correct sheet name 'van'
-    const response = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${extractedSheetId}/values/van?key=${apiKey}`
-    );
+    // Make the API request to Google Sheets
+    const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${extractedSheetId}/values/van?key=${apiKey}`;
+    console.log('🌐 Requesting URL:', sheetUrl);
+    
+    const response = await fetch(sheetUrl);
+    console.log('📊 Response status:', response.status, response.statusText);
     
     if (!response.ok) {
-      throw new Error(`Failed to fetch sheet data: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Google Sheets API error: ${response.status} ${response.statusText} - ${errorText}`);
     }
     
     const data = await response.json();

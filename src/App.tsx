@@ -332,12 +332,15 @@ const App = () => {
     filteredBuilders: hookFilteredBuilders,
     error,
     allVanTypes: hookVanTypes,
-    allAmenities: hookAmenities
+    allAmenities: hookAmenities,
+    builderData
   } = useBuilders({
-    // Use Google Sheets data source
+    // FORCE using Google Sheets data source
     useGoogleSheet: true,
     googleSheetId: '1gfw9r6opnyf6CFaQQJA_s0bBjHsphnImwaOuEdWpLYU',
-    apiKey: googleMapsApiKey // Use the already retrieved API key
+    apiKey: googleMapsApiKey, // Use the already retrieved API key
+    selectedState: 'New Jersey', // Force selecting New Jersey by default
+    mockBuilders: {} // Empty mock builders to ensure we use Google Sheets data
   });
   
   // Log Google Sheets integration status
