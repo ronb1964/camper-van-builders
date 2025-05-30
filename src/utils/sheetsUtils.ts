@@ -10,9 +10,17 @@ export const fetchBuildersFromSheet = async (
   sheetId: string,
   apiKey: string = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''
 ): Promise<Record<string, Builder[]>> => {
-  // Log for debugging (will be removed in production)
-  console.log('Fetching builders from sheet with ID:', sheetId);
-  console.log('API Key available:', apiKey ? 'Yes (length: ' + apiKey.length + ')' : 'No');
+  // Enhanced logging for debugging
+  console.log('🔍 Fetching builders from Google Sheet');
+  console.log('📄 Sheet ID:', sheetId);
+  console.log('🔑 API Key status:', apiKey ? `Available (${apiKey.substring(0, 3)}...${apiKey.substring(apiKey.length - 3)})` : 'Missing');
+  
+  // Force using mock data if no API key is provided
+  if (!apiKey || apiKey === 'MISSING_API_KEY' || apiKey === 'YOUR_API_KEY_HERE') {
+    console.error('❌ Valid Google Maps API key is required for Google Sheets integration');
+    throw new Error('Missing or invalid API key');
+  }
+  
   try {
     // Extract sheet ID from URL if full URL is provided
     const extractedSheetId = sheetId.includes('spreadsheets/d/') 

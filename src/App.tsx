@@ -315,9 +315,12 @@ const getTheme = (mode: PaletteMode) => createTheme({
 });
 
 const App = () => {
-  // Load Google Maps API with secure key handling
+  // Get Google Maps API key with secure handling
+  const googleMapsApiKey = getGoogleMapsApiKey();
+  
+  // Load Google Maps API
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: getGoogleMapsApiKey(),
+    googleMapsApiKey,
     // You can add additional libraries if needed
     // libraries: ['places'],
   });
@@ -334,8 +337,16 @@ const App = () => {
     // Use Google Sheets data source
     useGoogleSheet: true,
     googleSheetId: '1gfw9r6opnyf6CFaQQJA_s0bBjHsphnImwaOuEdWpLYU',
-    apiKey: getGoogleMapsApiKey() // Explicitly pass the API key
+    apiKey: googleMapsApiKey // Use the already retrieved API key
   });
+  
+  // Log Google Sheets integration status
+  useEffect(() => {
+    console.log('🔄 Google Sheets Integration Status:');
+    console.log('📊 Data Source:', 'Google Sheets'); // Always using Google Sheets in this app
+    console.log('❓ Error:', error || 'None');
+    console.log('🗺️ API Key Status:', googleMapsApiKey ? 'Available' : 'Missing');
+  }, [error, googleMapsApiKey]);
   const scrollToResults = useScrollToResults();
   const { 
     favorites, 
