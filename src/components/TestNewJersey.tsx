@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, Paper, CircularProgress } from '@mui/material';
-import { Builder, Review, PricingTier } from '../types';
+import { Builder, PricingTier } from '../types';
 
 // Helper functions for mock data
 // Using Review and PricingTier interfaces from types.ts
-const generateReviews = (count: number, averageRating: number): Review[] => {
-  const reviews: Review[] = [];
+const generateReviews = (count: number, averageRating: number): any[] => {
+  const reviews: any[] = [];
   for (let i = 0; i < count; i++) {
     reviews.push({
       id: i + 1,
@@ -77,7 +77,7 @@ const TestNewJersey: React.FC = () => {
         description: 'Custom tailored camper vans built by George Mauro. Specializing in luxury conversions for full-timers and extended living in comfort. From micro-campers to full-size luxury vans.',
         rating: 4.9,
         reviewCount: 87,
-        reviews: generateReviews(8, 4.9) as Review[],
+        reviews: generateReviews(8, 4.9) as any[],
         vanTypes: ['Sprinter', 'Transit', 'Promaster', 'Promaster City'],
         priceRange: { min: 38000, max: 215000 },
         pricingTiers: generatePricingTiers(85000),

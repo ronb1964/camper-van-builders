@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photo Update Guide</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .step { margin: 20px 0; padding: 15px; background: #f8f9fa; border-left: 4px solid #007acc; border-radius: 4px; }
+        .photo-urls { background: #e8f4f8; padding: 15px; border-radius: 4px; margin: 10px 0; font-family: monospace; }
+        .builder { margin: 15px 0; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 4px; }
+        .url { word-break: break-all; margin: 5px 0; padding: 5px; background: #f1f1f1; border-radius: 3px; }
+        .success { border-left-color: #28a745; background: #d4edda; }
+        .warning { border-left-color: #ffc107; background: #fff3cd; }
+        .copy-btn { background: #007acc; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-left: 10px; }
+        .copy-btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 Van Builder Photo Update Guide</h1>
+        
+        <div class="step success">
+            <h3>✅ Current Status</h3>
+            <p>Gallery functionality is working perfectly! The photos are displaying, but they're generic Unsplash images instead of actual builder photos.</p>
+        </div>
+
+        <div class="step warning">
+            <h3>🎯 Goal</h3>
+            <p>Replace the current generic photos with higher-quality, more professional van conversion images that better represent the builders' work.</p>
+        </div>
+
+        <div class="step">
+            <h3>📋 Manual Update Instructions</h3>
+            <ol>
+                <li>Open Google Sheets: <a href="https://docs.google.com/spreadsheets/d/1noZol3jQUF9EXHnatCHttRwmOgGN7S4Cavvrv9XyR8M" target="_blank">Camper Van Builders Sheet</a></li>
+                <li>Navigate to Column L (Photos)</li>
+                <li>Replace the URLs for each builder with the improved ones below</li>
+                <li>Refresh your React app to see the updated photos</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>🖼️ Updated Photo URLs</h3>
+            <p>Copy and paste these improved URLs into Column L of your Google Sheet:</p>
+
+            <div class="builder">
+                <h4>VanDoIt (Row 2)</h4>
+                <div class="photo-urls">
+                    <div class="url">https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&h=400&fit=crop&auto=format&q=80, https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&auto=format&q=80</div>
+                    <button class="copy-btn" onclick="copyToClipboard('vandoit-urls')">Copy URLs</button>
+                </div>
+                <p><strong>Features:</strong> Professional van interior, modern kitchen setup</p>
+            </div>
+
+            <div class="builder">
+                <h4>Humble Road (Row 12)</h4>
+                <div class="photo-urls">
+                    <div class="url">https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop&auto=format&q=80, https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&auto=format&q=80</div>
+                    <button class="copy-btn" onclick="copyToClipboard('humble-urls')">Copy URLs</button>
+                </div>
+                <p><strong>Features:</strong> Luxury van conversion, comfortable bedroom area</p>
+            </div>
+
+            <div class="builder">
+                <h4>Ready.Set.Van (Row 13)</h4>
+                <div class="photo-urls">
+                    <div class="url">https://images.unsplash.com/photo-1527786356703-4b100091cd2c?w=600&h=400&fit=crop&auto=format&q=80, https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&auto=format&q=80</div>
+                    <button class="copy-btn" onclick="copyToClipboard('ready-urls')">Copy URLs</button>
+                </div>
+                <p><strong>Features:</strong> Professional build quality, spacious living area</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>🔍 Verification Steps</h3>
+            <ol>
+                <li>After updating Google Sheets, refresh your React app</li>
+                <li>Click on each builder card (VanDoIt, Humble Road, Ready.Set.Van)</li>
+                <li>Click the "Gallery" tab in the modal</li>
+                <li>Verify that higher-quality, 600x400 images are now displayed</li>
+                <li>Images should load faster and look more professional</li>
+            </ol>
+        </div>
+
+        <div class="step success">
+            <h3>✨ Improvements Made</h3>
+            <ul>
+                <li><strong>Higher Resolution:</strong> 600x400 instead of 400x300</li>
+                <li><strong>Better Quality:</strong> q=80 parameter for sharper images</li>
+                <li><strong>Auto Format:</strong> Optimized for web display</li>
+                <li><strong>Professional Look:</strong> More realistic van conversion photos</li>
+            </ul>
+        </div>
+
+        <div class="step warning">
+            <h3>🚀 Next Steps for Real Builder Photos</h3>
+            <p>For truly authentic photos from each builder's actual work:</p>
+            <ol>
+                <li>Visit each builder's website gallery</li>
+                <li>Right-click on their van conversion photos</li>
+                <li>Select "Copy image address"</li>
+                <li>Replace the Unsplash URLs with their actual photo URLs</li>
+            </ol>
+            <p><strong>Builder Websites:</strong></p>
+            <ul>
+                <li>VanDoIt: <a href="https://vandoit.com/about-us/photos/" target="_blank">vandoit.com/about-us/photos/</a></li>
+                <li>Humble Road: <a href="https://www.humbleroad.tv/van01" target="_blank">humbleroad.tv/van01</a></li>
+                <li>Ready.Set.Van: <a href="https://www.readysetvan.com/gramercy" target="_blank">readysetvan.com/gramercy</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(id) {
+            const element = document.querySelector(`#${id}, .url`);
+            if (element) {
+                navigator.clipboard.writeText(element.textContent).then(() => {
+                    alert('URLs copied to clipboard!');
+                });
+            }
+        }
+
+        // Auto-refresh every 60 seconds
+        setTimeout(() => location.reload(), 60000);
+    </script>
+</body>
+</html>

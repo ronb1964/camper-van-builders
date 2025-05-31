@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .builder {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+        .debug {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .error {
+            color: red;
+            background: #ffe6e6;
+        }
+        .success {
+            color: green;
+            background: #e6ffe6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Gallery Test - Camper Van Builders</h1>
+        <p>Testing gallery data from Google Sheets API...</p>
+        
+        <div id="loading">⏳ Loading data...</div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyCmIKkLtGO5dftk_M_9rUGoJQl8zy-CFFI';
+        const SPREADSHEET_ID = '1noZol3jQUF9EXHnatCHttRwmOgGN7S4Cavvrv9XyR8M';
+        
+        async function testGalleryData() {
+            const loadingEl = document.getElementById('loading');
+            const resultsEl = document.getElementById('results');
+            
+            try {
+                console.log('🔍 Starting gallery test...');
+                
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/builders!A:L?key=${API_KEY}`;
+                console.log('📡 Fetching from:', url);
+                
+                const response = await fetch(url);
+                console.log('📡 Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('📊 Raw data:', data);
+                
+                const headers = data.values[0];
+                const rows = data.values.slice(1);
+                
+                console.log('📋 Headers:', headers);
+                console.log('📊 Total rows:', rows.length);
+                
+                // Find target builders
+                const targetBuilders = ['VanDoIt', 'Humble Road', 'Ready.Set.Van'];
+                
+                loadingEl.style.display = 'none';
+                
+                for (const builderName of targetBuilders) {
+                    const row = rows.find(r => r[1] && r[1].toLowerCase().includes(builderName.toLowerCase()));
+                    
+                    if (row) {
+                        console.log(`🏢 Processing ${builderName}:`, row);
+                        
+                        const builderDiv = document.createElement('div');
+                        builderDiv.className = 'builder';
+                        
+                        const photosData = row[11] || '';
+                        console.log(`📸 Photos data for ${builderName}:`, photosData);
+                        
+                        // Parse photos like the React app does
+                        let gallery = [];
+                        if (photosData.includes('http')) {
+                            gallery = photosData.split(',').map(url => url.trim());
+                        }
+                        
+                        console.log(`🖼️ Gallery for ${builderName}:`, gallery);
+                        
+                        builderDiv.innerHTML = `
+                            <h2>${builderName}</h2>
+                            <div class="debug">
+                                <strong>Raw Photos Data:</strong> ${photosData}<br>
+                                <strong>Parsed Gallery:</strong> ${JSON.stringify(gallery)}<br>
+                                <strong>Gallery Length:</strong> ${gallery.length}
+                            </div>
+                            <div class="gallery" id="gallery-${builderName.replace(/[^a-zA-Z0-9]/g, '')}">
+                                ${gallery.length > 0 ? 
+                                    gallery.map((url, index) => `
+                                        <div>
+                                            <img src="${url}" alt="${builderName} ${index + 1}" 
+                                                 onload="console.log('✅ Image loaded:', '${url}')"
+                                                 onerror="console.error('❌ Image failed:', '${url}')">
+                                        </div>
+                                    `).join('') : 
+                                    '<div class="debug error">No gallery images found</div>'
+                                }
+                            </div>
+                        `;
+                        
+                        resultsEl.appendChild(builderDiv);
+                    } else {
+                        console.error(`❌ Builder not found: ${builderName}`);
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'debug error';
+                        errorDiv.textContent = `❌ Builder not found: ${builderName}`;
+                        resultsEl.appendChild(errorDiv);
+                    }
+                }
+                
+                console.log('✅ Gallery test completed');
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                loadingEl.style.display = 'none';
+                resultsEl.innerHTML = `<div class="debug error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Start the test
+        testGalleryData();
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-import { Builder, Location, Review, PricingTier } from '../types';
+import { Builder, Location, PricingTier } from '../types';
 
 /**
  * Fetches builder data from a Google Sheets document

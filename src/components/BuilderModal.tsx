@@ -37,7 +37,7 @@ import {
   PhotoCamera as GalleryIcon
 } from '@mui/icons-material';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { Builder, Review, PricingTier } from '../types';
+import { Builder, PricingTier } from '../types';
 
 // Styled Components
 const ModalContent = styled(Box)(({ theme }) => ({
@@ -111,20 +111,16 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
     email,
     website,
     description,
-    rating,
-    reviewCount,
     vanTypes = [],
     amenities = [],
     services = [],
-    certifications = [],
     priceRange,
     pricingTiers = [],
     gallery = [],
-    reviews = [],
-    yearsInBusiness,
     leadTime,
     socialMedia = {},
-    location
+    location,
+    certifications = []
   } = builder;
 
   const renderTabContent = () => {
@@ -133,19 +129,9 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
         return (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
             <div>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Rating value={rating} readOnly precision={0.5} />
-                <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-                  {reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}
-                </Typography>
-              </Box>
               <Typography variant="body1" paragraph>{description}</Typography>
               
               <Box sx={{ mt: 2 }}>
-                <Typography variant="body2" color="text.secondary">
-                  <CalendarIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 1 }} />
-                  Years in Business: {yearsInBusiness || 'N/A'}
-                </Typography>
                 {leadTime && (
                   <Typography variant="body2" color="text.secondary">
                     <CalendarIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 1 }} />
@@ -309,74 +295,6 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
           </Box>
         );
 
-      case 3: // Reviews
-        return (
-          <Box>
-            {reviews.length > 0 ? (
-              <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                  <Rating value={rating} readOnly precision={0.5} size="large" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>
-                    {rating.toFixed(1)} · {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
-                  </Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                  {reviews.map((review, index) => (
-                    <Box
-                      key={index}
-                      sx={{
-                        p: 2,
-                        border: '1px solid',
-                        borderColor: 'divider',
-                        borderRadius: 1,
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                        <Typography variant="subtitle1" fontWeight="bold">
-                          {review.author}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {new Date(review.date).toLocaleDateString()}
-                        </Typography>
-                      </Box>
-                      <Rating value={review.rating} readOnly size="small" />
-                      <Typography variant="body1" sx={{ mt: 1 }}>
-                        {review.comment}
-                      </Typography>
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
-            ) : (
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minHeight: 200,
-                  bgcolor: 'action.hover',
-                  borderRadius: 2,
-                  p: 3,
-                  textAlign: 'center',
-                }}
-              >
-                <StarIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
-                <Typography variant="h6" gutterBottom>
-                  No reviews yet
-                </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 400, mb: 2 }}>
-                  Be the first to share your experience with {name}!
-                </Typography>
-                <Button variant="contained" color="primary">
-                  Write a Review
-                </Button>
-              </Box>
-            )}
-          </Box>
-        );
-
       default:
         return null;
     }
@@ -415,7 +333,6 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
             <Tab label="Overview" />
             <Tab label="Pricing" />
             <Tab label="Gallery" />
-            <Tab label={`Reviews (${reviews.length})`} />
           </Tabs>
 
           <ModalBody>

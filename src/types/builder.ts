@@ -7,14 +7,6 @@ export interface Location {
   [key: string]: any; // Allow additional properties
 }
 
-export interface Review {
-  id: number;
-  author: string;
-  rating: number;
-  date: string;
-  comment: string;
-}
-
 export interface PricingTier {
   name: string;
   price: number;
@@ -31,9 +23,6 @@ export interface Builder {
   website: string;
   location: Location;
   description: string;
-  rating: number;
-  reviewCount: number;
-  reviews: Review[];
   vanTypes?: string[];
   priceRange?: {
     min: number;
@@ -41,7 +30,6 @@ export interface Builder {
   };
   pricingTiers?: PricingTier[];
   amenities?: string[];
-  yearsInBusiness?: number;
   certifications?: string[];
   services?: string[];
   socialMedia?: {

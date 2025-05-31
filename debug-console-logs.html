@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Console Logs</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .instruction { background: #f0f8ff; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .step { margin: 10px 0; padding: 10px; background: #f9f9f9; border-left: 4px solid #007acc; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Gallery Issue - Console Log Instructions</h1>
+    
+    <div class="instruction">
+        <h3>Please follow these steps to help debug the gallery issue:</h3>
+        
+        <div class="step">
+            <strong>Step 1:</strong> Open the camper van app in your browser at <code>http://localhost:3000</code>
+        </div>
+        
+        <div class="step">
+            <strong>Step 2:</strong> Open browser Developer Tools (F12 or right-click → Inspect)
+        </div>
+        
+        <div class="step">
+            <strong>Step 3:</strong> Go to the Console tab
+        </div>
+        
+        <div class="step">
+            <strong>Step 4:</strong> Look for these specific debug messages:
+            <ul>
+                <li>🖼️ Gallery Debug for VanDoIt (from GoogleSheetsService)</li>
+                <li>🎭 BuilderModal Debug for VanDoIt (from BuilderModal)</li>
+                <li>Any error messages related to gallery or photos</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <strong>Step 5:</strong> Click on a builder card (VanDoIt, Humble Road, or Ready.Set.Van)
+        </div>
+        
+        <div class="step">
+            <strong>Step 6:</strong> Click the "Gallery" tab in the modal
+        </div>
+        
+        <div class="step">
+            <strong>Step 7:</strong> Copy and paste any relevant console log messages here
+        </div>
+    </div>
+    
+    <h3>What to look for:</h3>
+    <ul>
+        <li><strong>Gallery data structure:</strong> Is the gallery array populated?</li>
+        <li><strong>Photo URLs:</strong> Are the URLs valid and accessible?</li>
+        <li><strong>Component rendering:</strong> Is the PhotoGallery component receiving data?</li>
+        <li><strong>Error messages:</strong> Any JavaScript errors or network failures?</li>
+    </ul>
+</body>
+</html>
