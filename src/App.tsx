@@ -19,7 +19,7 @@ import {
   Paper
 } from '@mui/material';
 import { getGoogleMapsApiKey } from './utils/apiUtils';
-import { scrollToElement } from './utils/scrollUtils';
+import { centerElementOnScreen } from './utils/scrollUtils';
 import SimpleMapView from './components/SimpleMapView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import MapIcon from '@mui/icons-material/Map';
@@ -36,7 +36,6 @@ import {
 import GoogleSheetBuildersList from './components/GoogleSheetBuildersList';
 import CustomGoogleMap from './components/CustomGoogleMap';
 import SecureImage from './components/SecureImage';
-import SecureMarker from './components/SecureMarker';
 import { Location } from './types';
 import { 
   useThemeMode, 
@@ -264,6 +263,8 @@ const App = () => {
 
   // Use custom hooks
   const { mode, toggleThemeMode } = useThemeMode();
+  const theme = getTheme(mode);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { recentlyViewed, addToRecentlyViewed, clearRecentlyViewed } = useRecentlyViewed();
   const scrollToResults = useScrollToResults();
 
@@ -519,21 +520,58 @@ const App = () => {
       // Set zoom to builder flag
       setIsZoomedToBuilder(true);
       
-      // Center map on builder location with high zoom
-      setMapCenter({
-        lat: builder.location.lat,
-        lng: builder.location.lng
-      });
-      
-      // Scroll to map section
-      scrollToResults();
+      // Add a small delay to ensure map view is rendered before centering
+      setTimeout(() => {
+        // Find the builder's index in the current displayed list to calculate offset
+        let builderIndex = 0;
+        let currentBuilders: Builder[] = [];
+        
+        if (selectedZipCode && buildersByState[selectedZipCode]) {
+          // For zip code searches, results are stored under the zip code key
+          currentBuilders = buildersByState[selectedZipCode];
+        } else if (selectedState && buildersByState[selectedState]) {
+          // For state searches, results are stored under the state key
+          currentBuilders = buildersByState[selectedState];
+        } else if (searchedBuilderName) {
+          // For builder name searches, filter all builders
+          currentBuilders = builders.filter(builder => 
+            builder.name.toLowerCase().includes(searchedBuilderName.toLowerCase())
+          );
+        } else {
+          // Default to all builders
+          currentBuilders = builders;
+        }
+        
+        // Find the index of this specific builder in the current list
+        builderIndex = currentBuilders.findIndex(b => 
+          b.name === builder.name && 
+          b.location?.lat === builder.location?.lat && 
+          b.location?.lng === builder.location?.lng
+        );
+        
+        // If not found, default to 0
+        if (builderIndex === -1) builderIndex = 0;
+        
+        // Apply the same offset used in CustomGoogleMap
+        const offsetLat = builder.location.lat + (builderIndex * 0.005);
+        const offsetLng = builder.location.lng + (builderIndex * 0.005);
+        
+        // Center map on builder location with offset to match marker position
+        setMapCenter({
+          lat: offsetLat,
+          lng: offsetLng
+        });
+        
+        // Center the map container on the mobile screen for better UX
+        centerElementOnScreen('map-container');
+      }, 100);
       
       // Optional: Show success message
       setSnackbarMessage(`Zoomed to ${builder.name} in ${builder.location.city}, ${builder.location.state}`);
       setSnackbarSeverity('info');
       setSnackbarOpen(true);
     }
-  }, [scrollToResults]);
+  }, [selectedZipCode, buildersByState, selectedState, searchedBuilderName, builders]);
 
   // Handle builder modal
   const handleViewDetails = useCallback((builder: Builder) => {
@@ -551,9 +589,6 @@ const App = () => {
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
-
-  // Create theme based on current mode
-  const theme = useMemo(() => getTheme(mode), [mode]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -678,15 +713,17 @@ const App = () => {
               </Button>
             </Box>
             
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 4 }}>
+            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, mb: 4 }}>
               <Tabs 
                 value={activeTab} 
                 onChange={handleTabChange}
+                variant={isMobile ? "fullWidth" : "standard"}
                 sx={{ 
                   '& .MuiTabs-indicator': {
                     height: 4,
                     borderRadius: '4px 4px 0 0',
                   },
+                  minWidth: isMobile ? '100%' : 'auto',
                 }}
                 indicatorColor="primary"
                 textColor="primary"
@@ -695,19 +732,21 @@ const App = () => {
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <ViewListIcon />
-                      <span>List View</span>
+                      <span style={{ display: isMobile ? 'none' : 'inline' }}>List View</span>
+                      {isMobile && <span>List</span>}
                     </Box>
                   } 
-                  sx={{ py: 2, fontSize: '1rem' }}
+                  sx={{ py: 2, fontSize: '1rem', minWidth: isMobile ? 'auto' : 120 }}
                 />
                 <Tab 
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <MapIcon />
-                      <span>Map View</span>
+                      <span style={{ display: isMobile ? 'none' : 'inline' }}>Map View</span>
+                      {isMobile && <span>Map</span>}
                     </Box>
                   } 
-                  sx={{ py: 2, fontSize: '1rem' }}
+                  sx={{ py: 2, fontSize: '1rem', minWidth: isMobile ? 'auto' : 120 }}
                 />
               </Tabs>
             </Box>
@@ -737,7 +776,7 @@ const App = () => {
               />
             ) : (
               // Map View
-              <Box sx={{ height: '600px', borderRadius: 2, overflow: 'hidden', position: 'relative' }}>
+              <>
                 {(() => {
                   // Get builders for the selected state, zip code, or searched builder name
                   let currentBuilders: Builder[] = [];
@@ -759,62 +798,84 @@ const App = () => {
                            !isNaN(builder.location.lat) && 
                            !isNaN(builder.location.lng);
                   });
-                  
-                  console.log('🗺️ Map Render Debug:', {
-                    selectedState,
-                    selectedZipCode,
-                    searchedBuilderName,
-                    currentBuildersCount: currentBuilders.length,
-                    validBuildersCount: validBuilders.length,
-                    mapCenter,
-                    isLoaded,
-                    loadError: loadError?.message || 'None',
-                    validBuilders: validBuilders.map(b => ({
-                      name: b.name,
-                      lat: b.location.lat,
-                      lng: b.location.lng,
-                      city: b.location.city,
-                      state: b.location.state
-                    }))
-                  });
-                  
-                  if (loadError) {
-                    console.error('🚨 Map Load Error Details:', loadError);
-                    return (
-                      <Box sx={{ p: 4, textAlign: 'center' }}>
-                        <Typography variant="h6" color="error" gutterBottom>
-                          Map Loading Error
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                          {loadError.message}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Please check browser console for more details.
-                        </Typography>
-                      </Box>
-                    );
-                  }
-                  
-                  if (!isLoaded) {
-                    return (
-                      <Box sx={{ p: 4, textAlign: 'center' }}>
-                        <Typography variant="body1">Loading Google Maps API...</Typography>
-                      </Box>
-                    );
-                  }
-                  
+
                   return (
-                    <CustomGoogleMap
-                      builders={validBuilders}
-                      center={{ lat: mapCenter.lat, lng: mapCenter.lng }}
-                      zoom={isZoomedToBuilder ? 14 : selectedState ? 8 : selectedZipCode && !isZoomedToBuilder ? undefined : 6}
-                      fitBounds={Boolean(selectedZipCode && !isZoomedToBuilder)}
-                      onMarkerClick={handleViewDetails}
-                      isLoaded={isLoaded}
-                    />
+                    <>
+                      {validBuilders.length > 0 && (
+                        <Typography variant="subtitle1" gutterBottom>
+                          {validBuilders.length} builder{validBuilders.length !== 1 ? 's' : ''} found
+                        </Typography>
+                      )}
+                      <Box 
+                        id="map-container" 
+                        sx={{ 
+                          height: { xs: '400px', sm: '500px', md: '600px' }, 
+                          borderRadius: 2, 
+                          overflow: 'hidden', 
+                          position: 'relative' 
+                        }}
+                      >
+                        {(() => {
+                          // Debug
+                          console.log('🗺️ Map Render Debug:', {
+                            selectedState,
+                            selectedZipCode,
+                            searchedBuilderName,
+                            currentBuildersCount: currentBuilders.length,
+                            validBuildersCount: validBuilders.length,
+                            mapCenter,
+                            isLoaded,
+                            loadError: loadError?.message || 'None',
+                            validBuilders: validBuilders.map(b => ({
+                              name: b.name,
+                              lat: b.location.lat,
+                              lng: b.location.lng,
+                              city: b.location.city,
+                              state: b.location.state
+                            }))
+                          });
+                          
+                          if (loadError) {
+                            console.error('🚨 Map Load Error Details:', loadError);
+                            return (
+                              <Box sx={{ p: 4, textAlign: 'center' }}>
+                                <Typography variant="h6" color="error" gutterBottom>
+                                  Map Loading Error
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                  {loadError.message}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  Please check browser console for more details.
+                                </Typography>
+                              </Box>
+                            );
+                          }
+                          
+                          if (!isLoaded) {
+                            return (
+                              <Box sx={{ p: 4, textAlign: 'center' }}>
+                                <Typography variant="body1">Loading Google Maps API...</Typography>
+                              </Box>
+                            );
+                          }
+                          
+                          return (
+                            <CustomGoogleMap
+                              builders={validBuilders}
+                              center={{ lat: mapCenter.lat, lng: mapCenter.lng }}
+                              zoom={isZoomedToBuilder ? 14 : selectedState ? 8 : selectedZipCode && !isZoomedToBuilder ? undefined : 6}
+                              fitBounds={Boolean(selectedZipCode && !isZoomedToBuilder)}
+                              onMarkerClick={handleViewDetails}
+                              isLoaded={isLoaded}
+                            />
+                          );
+                        })()}
+                      </Box>
+                    </>
                   );
                 })()}
-              </Box>
+              </>
             )}
           </Box>
         )}

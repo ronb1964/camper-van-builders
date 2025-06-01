@@ -404,6 +404,10 @@ const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZi
               onKeyDown={handleZipCodeKeyDown}
               placeholder="e.g. 90210"
               inputRef={zipCodeInputRef}
+              inputProps={{
+                inputMode: 'numeric',
+                pattern: '[0-9]*'
+              }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
