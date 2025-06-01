@@ -27,3 +27,34 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Backup directories
+/backups
+
+# Scripts and temporary files
+*.js
+!src/**/*.js
+!public/**/*.js
+!scripts/**/*.js
+
+# JSON data files (extracted photos, etc.)
+*-photos.json
+*-images.json
+*-extracted-photos.json
+*-gallery-extraction-results.json
+*-research.json
+*-research.md
+
+# Temporary and debug files
+diagnose-*.js
+extract-*.js
+fix-*.js
+remove-*.js
+update-*.js
+test-*.js
+expand-*.js
+*.md
+!README.md
+
+# Windsurf deployment files (keep for deployment)
+!windsurf_deployment.yaml
