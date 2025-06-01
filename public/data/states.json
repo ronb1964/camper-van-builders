@@ -48,5 +48,10 @@
   "Washington",
   "West Virginia",
   "Wisconsin",
-  "Wyoming"
+  "Wyoming",
+  {
+    "code": "NJ",
+    "name": "New Jersey",
+    "builderCount": 3
+  }
 ]

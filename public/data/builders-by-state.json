@@ -4633,5 +4633,79 @@
       },
       "gallery": []
     }
+  ],
+  "NJ": [
+    {
+      "name": "Jasper Vans",
+      "address": "Asbury Park, NJ",
+      "phone": "Contact via website",
+      "email": "info@jaspervans.com",
+      "website": "",
+      "location": {
+        "lat": 0,
+        "lng": 0,
+        "city": "Asbury Park",
+        "state": "NJ",
+        "zip": "07712"
+      },
+      "description": "",
+      "vanTypes": [],
+      "services": [],
+      "amenities": [],
+      "priceRange": null,
+      "leadTime": "",
+      "socialMedia": {},
+      "certifications": [],
+      "gallery": [],
+      "id": "99"
+    },
+    {
+      "name": "Versatile Vans",
+      "address": "209 Coyote Run, Mullica Hill, NJ 08062",
+      "phone": "610-955-4448",
+      "email": "info@versatilevans.com",
+      "website": "",
+      "location": {
+        "lat": 0,
+        "lng": 0,
+        "city": "Mullica Hill",
+        "state": "NJ",
+        "zip": "08062"
+      },
+      "description": "",
+      "vanTypes": [],
+      "services": [],
+      "amenities": [],
+      "priceRange": null,
+      "leadTime": "",
+      "socialMedia": {},
+      "certifications": [],
+      "gallery": [],
+      "id": "100"
+    },
+    {
+      "name": "Nomad RVs",
+      "address": "Toms River, NJ",
+      "phone": "908-415-5080",
+      "email": "contact@nomadrvs.com",
+      "website": "",
+      "location": {
+        "lat": 0,
+        "lng": 0,
+        "city": "Toms River",
+        "state": "NJ",
+        "zip": "08755"
+      },
+      "description": "",
+      "vanTypes": [],
+      "services": [],
+      "amenities": [],
+      "priceRange": null,
+      "leadTime": "",
+      "socialMedia": {},
+      "certifications": [],
+      "gallery": [],
+      "id": "101"
+    }
   ]
 }
