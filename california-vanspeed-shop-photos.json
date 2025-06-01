@@ -1,0 +1,88 @@
+{
+  "builder": "Vanspeed Shop",
+  "website": "https://www.vanspeedshop.com/",
+  "extractedAt": "2025-06-01T10:56:25.559Z",
+  "totalImages": 10,
+  "images": [
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/CA_COAST_b5b361d0-46e3-48e0-a105-4c000b0f2759.png?v=1748461024&width=300",
+      "alt": "",
+      "width": 1919,
+      "height": 1919,
+      "className": "multi-column__media-img multi-column__media-img--crop",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/1_c3ed1316-592c-44df-b21f-7d6e7119ca27.png?v=1741986451&width=300",
+      "alt": "",
+      "width": 1919,
+      "height": 1919,
+      "className": "multi-column__media-img multi-column__media-img--crop",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/3_064783a3-05b7-4ff8-bdb2-43b778e4f88b.png?v=1741986451&width=300",
+      "alt": "",
+      "width": 1919,
+      "height": 1919,
+      "className": "multi-column__media-img multi-column__media-img--crop",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/2_284b47c9-3d3c-428b-bfdb-388037102ac5.png?v=1741986450&width=300",
+      "alt": "",
+      "width": 1919,
+      "height": 1919,
+      "className": "multi-column__media-img multi-column__media-img--crop",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/CA_COAST.png?v=1741988353&width=300",
+      "alt": "",
+      "width": 1919,
+      "height": 1919,
+      "className": "multi-column__media-img multi-column__media-img--crop",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/VANSPEED_WEBSITE_OUTLINE_SAMPLE_2023-22_e5a9014a-b518-43b0-8757-7f5c54a1b5f2.png?v=1685496688&width=300",
+      "alt": "Mercedes-Benz Sprinter Van 144",
+      "width": 1919,
+      "height": 1918,
+      "className": "multi-column__media-img multi-column__media-img--fit",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/VANSPEED_WEBSITE_OUTLINE_SAMPLE_2023-23_ae84a677-6723-4538-9e15-5bf61d4a2855.png?v=1685496697&width=300",
+      "alt": "Mercedes-Benz Sprinter Van 170",
+      "width": 1919,
+      "height": 1918,
+      "className": "multi-column__media-img multi-column__media-img--fit",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/VANSPEED_WEBSITE_OUTLINE_SAMPLE_2023-24_1_df19777a-62db-4e47-ba0c-d60202b76ad8.png?v=1685572579&width=300",
+      "alt": "Mercedes-Benz Sprinter Van ",
+      "width": 1919,
+      "height": 1918,
+      "className": "multi-column__media-img multi-column__media-img--fit",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/P2.png?v=1681840951&width=300",
+      "alt": "",
+      "width": 1920,
+      "height": 1557,
+      "className": "footer-nav__image-img",
+      "id": ""
+    },
+    {
+      "src": "https://www.vanspeedshop.com/cdn/shop/files/AltCampNewListingShots13_600x.jpg?v=1742841258",
+      "alt": "",
+      "width": 1920,
+      "height": 1280,
+      "className": "home-carousel__bg home-carousel__bg--template--18783508300086__section-slideshow3",
+      "id": ""
+    }
+  ]
+}

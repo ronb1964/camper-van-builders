@@ -1,0 +1,87 @@
+{
+  "builder": "Vulcan Coach",
+  "url": "https://www.vulcancoach.com",
+  "timestamp": "2025-06-01T08:35:40.652Z",
+  "totalFound": 27,
+  "uniqueSelected": 8,
+  "galleryLinks": [
+    {
+      "url": "https://www.vulcancoach.com/photogallery",
+      "text": "Photo gallery"
+    }
+  ],
+  "images": [
+    {
+      "src": "https://lirp.cdn-website.com/10213fe7bdbf4f8aa96a87dfab968cc0/dms3rep/multi/opt/IMG_2920-1920w.JPEG",
+      "alt": "",
+      "title": "",
+      "width": 1920,
+      "height": 2560,
+      "className": "sc-fqkvVR kmKOkQ",
+      "parentText": ""
+    },
+    {
+      "src": "https://lirp.cdn-website.com/10213fe7bdbf4f8aa96a87dfab968cc0/dms3rep/multi/opt/IMG_2710-1920w.JPEG",
+      "alt": "",
+      "title": "",
+      "width": 1920,
+      "height": 2560,
+      "className": "sc-fqkvVR fECgwp",
+      "parentText": ""
+    },
+    {
+      "src": "https://lirp.cdn-website.com/10213fe7bdbf4f8aa96a87dfab968cc0/dms3rep/multi/opt/IMG_2718-1920w.JPEG",
+      "alt": "",
+      "title": "",
+      "width": 1920,
+      "height": 2560,
+      "className": "sc-fqkvVR fECgwp",
+      "parentText": ""
+    },
+    {
+      "src": "https://lirp.cdn-website.com/10213fe7bdbf4f8aa96a87dfab968cc0/dms3rep/multi/opt/IMG_3431-1920w.JPEG",
+      "alt": "",
+      "title": "",
+      "width": 1920,
+      "height": 2560,
+      "className": "sc-fqkvVR fECgwp",
+      "parentText": ""
+    },
+    {
+      "src": "https://lirp.cdn-website.com/10213fe7bdbf4f8aa96a87dfab968cc0/dms3rep/multi/opt/IMG_0883-1920w.JPEG",
+      "alt": "",
+      "title": "",
+      "width": 1920,
+      "height": 2560,
+      "className": "sc-fqkvVR fECgwp",
+      "parentText": ""
+    },
+    {
+      "src": "https://lirp.cdn-website.com/10213fe7bdbf4f8aa96a87dfab968cc0/dms3rep/multi/opt/IMG_1517-1920w.JPEG",
+      "alt": "",
+      "title": "",
+      "width": 1920,
+      "height": 2560,
+      "className": "sc-fqkvVR fECgwp",
+      "parentText": ""
+    },
+    {
+      "src": "https://lirp.cdn-website.com/10213fe7bdbf4f8aa96a87dfab968cc0/dms3rep/multi/opt/IMG_8478-1920w.JPEG",
+      "alt": "",
+      "title": "",
+      "width": 1536,
+      "height": 2048,
+      "className": "sc-fqkvVR fECgwp",
+      "parentText": ""
+    },
+    {
+      "src": "https://lirp.cdn-website.com/10213fe7bdbf4f8aa96a87dfab968cc0/dms3rep/multi/opt/IMG_2578-1920w.JPEG",
+      "alt": "",
+      "title": "",
+      "width": 1920,
+      "height": 1440,
+      "className": "sc-fqkvVR fECgwp",
+      "parentText": ""
+    }
+  ]
+}

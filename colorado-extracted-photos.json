@@ -1,0 +1,85 @@
+{
+  "The Vansmith": {
+    "id": 20,
+    "website": "https://thevansmith.com/",
+    "photos": [],
+    "photoCount": 0
+  },
+  "Titan Vans": {
+    "id": 21,
+    "website": "https://www.titanvans.com/",
+    "photos": [
+      {
+        "url": "https://www.titanvans.com/images/camper-van-builder-z.jpg",
+        "alt": "Our van conversion builder shown on a laptop",
+        "caption": "Our van conversion builder shown on a laptop"
+      },
+      {
+        "url": "https://www.titanvans.com/images/camper-van-models-z.jpg",
+        "alt": "A Titan Vans camper van",
+        "caption": "A Titan Vans camper van"
+      },
+      {
+        "url": "https://www.titanvans.com/images/camper-van-service-z.jpg",
+        "alt": "service",
+        "caption": "service"
+      },
+      {
+        "url": "https://www.titanvans.com/images/hp-ex3.png",
+        "alt": "The EX3 camper van electrical system",
+        "caption": "The EX3 camper van electrical system"
+      },
+      {
+        "url": "https://www.titanvans.com/images/camper-van-builder.png",
+        "alt": "The Titan Vans online van conversion builder on a laptop screen",
+        "caption": "The Titan Vans online van conversion builder on a laptop screen"
+      }
+    ],
+    "photoCount": 5
+  },
+  "Boulder Campervans": {
+    "id": 22,
+    "website": "https://www.bouldercampervans.com/",
+    "photos": [],
+    "photoCount": 0
+  },
+  "Viking Van Customs": {
+    "id": 23,
+    "website": "https://vikingvancustoms.com/",
+    "photos": [
+      {
+        "url": "https://vikingvancustoms.com/wp-content/uploads/2022/10/KuK-18_296A4355-scaled.jpg",
+        "alt": "Viking Van Customs van conversion 1",
+        "caption": "Custom van conversion by Viking Van Customs"
+      },
+      {
+        "url": "https://vikingvancustoms.com/wp-content/uploads/2024/02/2b55ec42-9346-42cd-b26f-d2f0160411ae.png",
+        "alt": "Viking Van Customs van conversion 2",
+        "caption": "Custom van conversion by Viking Van Customs"
+      }
+    ],
+    "photoCount": 2
+  },
+  "Flippin Vans": {
+    "id": 24,
+    "website": "https://www.flippinvans.com/",
+    "photos": [
+      {
+        "url": "https://images.squarespace-cdn.com/content/v1/5fb53a9529d5e95fd382a90c/94924834-5402-4994-8e06-fe9b2c9213fc/FV-2971.jpg?format=2500w",
+        "alt": "Flippin Vans van conversion 1",
+        "caption": "Custom van conversion by Flippin Vans"
+      },
+      {
+        "url": "https://images.squarespace-cdn.com/content/v1/5fb53a9529d5e95fd382a90c/94924834-5402-4994-8e06-fe9b2c9213fc/FV-2971.jpg",
+        "alt": "Flippin Vans van conversion 2",
+        "caption": "Custom van conversion by Flippin Vans"
+      },
+      {
+        "url": "https://images.squarespace-cdn.com/content/v1/5fb53a9529d5e95fd382a90c/1669403169351-A9QIBS4LBSTLG2CD9P1A/flippin_shop.jpg",
+        "alt": "flippin_shop.jpg",
+        "caption": "flippin_shop.jpg"
+      }
+    ],
+    "photoCount": 3
+  }
+}

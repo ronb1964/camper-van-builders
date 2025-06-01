@@ -1,0 +1,22 @@
+{
+  "97": {
+    "name": "Hawaii Surf Campers",
+    "website": "https://www.hawaiisurfcampers.com/",
+    "photos": [],
+    "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://www.hawaiisurfcampers.com/\", waiting until \"networkidle\"\u001b[22m\n"
+  },
+  "98": {
+    "name": "Campervans Big Island",
+    "website": "https://www.campervansbigisland.com/",
+    "photos": [
+      "https://static.wixstatic.com/media/11062b_e55321c53b02478b9bafa28958160488f000.jpg/v1/fill/w_1280,h_720,al_c,q_85,usm_0.33_1.00_0.00,enc_avif,quality_auto/11062b_e55321c53b02478b9bafa28958160488f000.jpg",
+      "https://static.wixstatic.com/media/11062b_7977fc0282fb4442966d85cd8aa44b9f~mv2.jpeg/v1/crop/x_0,y_0,w_4200,h_1980/fill/w_1344,h_630,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Campsite%20by%20the%20Sea.jpeg",
+      "https://static.wixstatic.com/media/d8985a_dca74b781e3c4b22b3643a5271cb9658~mv2.jpg/v1/fill/w_318,h_944,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/d8985a_dca74b781e3c4b22b3643a5271cb9658~mv2.jpg",
+      "https://static.wixstatic.com/media/d8985a_7b1f333f8be9435495bf335bfd6c5c2a~mv2.jpg/v1/fill/w_103,h_155,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/d8985a_7b1f333f8be9435495bf335bfd6c5c2a~mv2.jpg",
+      "https://static.wixstatic.com/media/d8985a_09bc050763ac4fd9813240d216587772~mv2.jpg/v1/fill/w_450,h_450,fp_0.49_0.6,q_90,enc_avif,quality_auto/d8985a_09bc050763ac4fd9813240d216587772~mv2.jpg",
+      "https://static.wixstatic.com/media/d8985a_e3ff68ebc77b469184a83956d7839df6~mv2.jpg/v1/fill/w_450,h_450,fp_0.5_0.6,q_90,enc_avif,quality_auto/d8985a_e3ff68ebc77b469184a83956d7839df6~mv2.jpg"
+    ],
+    "totalFound": 41,
+    "gallerySpecific": 58
+  }
+}

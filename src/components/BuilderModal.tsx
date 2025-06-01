@@ -16,7 +16,10 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  styled
+  styled,
+  Tooltip,
+  useTheme,
+  alpha
 } from '@mui/material';
 import {
   Close as CloseIcon,
@@ -29,15 +32,21 @@ import {
   Instagram as InstagramIcon,
   YouTube as YouTubeIcon,
   Pinterest as PinterestIcon,
-  LocationOn as LocationIcon,
-  Check as CheckIcon,
+  ArrowBackIos,
+  ArrowForwardIos,
+  Phone,
+  Email,
+  Language,
+  YouTube,
+  Instagram,
   CalendarToday as CalendarIcon,
-  Build as BuildIcon,
-  EmojiEvents as CertIcon,
-  PhotoCamera as GalleryIcon
+  Check as CheckIcon,
+  PhotoCamera as GalleryIcon,
+  ArrowBack as ArrowBackIcon,
+  ArrowForward as ArrowForwardIcon
 } from '@mui/icons-material';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { Builder, PricingTier } from '../types';
+import { Builder, PricingTier, type GalleryImage } from '../types';
 
 // Styled Components
 const ModalContent = styled(Box)(({ theme }) => ({
@@ -74,15 +83,15 @@ const ModalBody = styled(Box)(({ theme }) => ({
   flexGrow: 1,
 }));
 
-const GalleryImage = styled('img')({
+const StyledGalleryImage = styled('img')({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
   borderRadius: 8,
   cursor: 'pointer',
-  transition: 'transform 0.3s ease',
+  transition: 'transform 0.2s ease-in-out',
   '&:hover': {
-    transform: 'scale(1.02)',
+    transform: 'scale(1.05)',
   },
 });
 
@@ -93,35 +102,81 @@ interface BuilderModalProps {
 }
 
 const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) => {
+  // Early return must come before any hooks
+  if (!builder) return null;
+
   const [activeTab, setActiveTab] = useState(0);
   const [mainImage, setMainImage] = useState('');
+  const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const theme = useTheme();
 
   useEffect(() => {
     if (builder?.gallery?.[0]) {
-      setMainImage(builder.gallery[0]);
+      // Handle both string arrays and object arrays
+      const firstImage = typeof builder.gallery[0] === 'string' 
+        ? builder.gallery[0] 
+        : builder.gallery[0].url;
+      setMainImage(firstImage);
     }
   }, [builder]);
 
-  if (!builder) return null;
-
   const {
     name,
-    address,
+    location,
+    description,
     phone,
     email,
     website,
-    description,
-    vanTypes = [],
-    amenities = [],
-    services = [],
-    priceRange,
-    pricingTiers = [],
-    gallery = [],
+    socialMedia,
+    vanTypes,
     leadTime,
-    socialMedia = {},
-    location,
-    certifications = []
+    amenities,
+    gallery
   } = builder;
+
+  useEffect(() => {
+    if (gallery) {
+      console.log('🖼️ Gallery Debug:', { 
+        builderName: name, 
+        galleryLength: (gallery || []).length, 
+        galleryItems: gallery 
+      });
+    }
+  }, [gallery, name]);
+
+  // Gallery navigation functions
+  const validGalleryImages = ((gallery || []) as (string | GalleryImage)[])
+    .filter((item: string | GalleryImage) => {
+      if (typeof item === 'string') {
+        return item && item.startsWith('http');
+      }
+      return item && item.url && item.url.startsWith('http');
+    })
+    .map((item: string | GalleryImage) => typeof item === 'string' ? item : item.url);
+  
+  const handleImageClick = (imageUrl: string) => {
+    const index = validGalleryImages.indexOf(imageUrl);
+    setCurrentImageIndex(index);
+    setEnlargedImage(imageUrl);
+  };
+
+  const handlePrevImage = () => {
+    const newIndex = currentImageIndex > 0 ? currentImageIndex - 1 : validGalleryImages.length - 1;
+    setCurrentImageIndex(newIndex);
+    setEnlargedImage(validGalleryImages[newIndex]);
+  };
+
+  const handleNextImage = () => {
+    const newIndex = currentImageIndex < validGalleryImages.length - 1 ? currentImageIndex + 1 : 0;
+    setCurrentImageIndex(newIndex);
+    setEnlargedImage(validGalleryImages[newIndex]);
+  };
+
+  const handleCloseEnlarged = () => {
+    setEnlargedImage(null);
+    setCurrentImageIndex(0);
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -144,16 +199,16 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
             <div>
               <Typography variant="h6" gutterBottom>Van Types</Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-                {vanTypes.map((type) => (
-                  <Chip key={type} label={type} color="primary" variant="outlined" />
+                {(vanTypes || []).map((type, index) => (
+                  <Chip key={index} label={type} color="primary" variant="outlined" />
                 ))}
               </Box>
 
               <Typography variant="h6" gutterBottom>Amenities</Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-                {amenities.map((amenity) => (
+                {(amenities || []).map((amenity, index) => (
                   <Chip 
-                    key={amenity} 
+                    key={index} 
                     label={amenity} 
                     variant="outlined"
                     icon={<CheckIcon fontSize="small" />}
@@ -164,115 +219,164 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
           </div>
         );
 
-      case 1: // Pricing
+      case 1: // Gallery
         return (
           <Box>
-            {priceRange && (
-              <Box sx={{ mb: 4 }}>
-                <Typography variant="h6" gutterBottom>Price Range</Typography>
-                <Typography variant="h5" color="primary" gutterBottom>
-                  ${priceRange.min.toLocaleString()} - ${priceRange.max.toLocaleString()}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Prices may vary based on customization options and features selected.
-                </Typography>
-              </Box>
-            )}
-
-            {pricingTiers.length > 0 && (
+            {(gallery || []).length > 0 ? (
               <Box>
-                <Typography variant="h6" gutterBottom>Pricing Tiers</Typography>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-                  {pricingTiers.map((tier, index) => (
-                    <div key={index}>
+                {/* Scrolling Grid Gallery */}
+                <Box 
+                  sx={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+                    gap: 2,
+                    maxHeight: '60vh',
+                    overflowY: 'auto',
+                    pr: 1,
+                    '&::-webkit-scrollbar': {
+                      width: '8px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      background: '#f1f1f1',
+                      borderRadius: '4px',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      background: '#c1c1c1',
+                      borderRadius: '4px',
+                      '&:hover': {
+                        background: '#a8a8a8',
+                      },
+                    },
+                  }}
+                >
+                  {((gallery || []) as (string | GalleryImage)[])
+                    .filter((item: string | GalleryImage) => {
+                      if (typeof item === 'string') {
+                        return item && item.startsWith('http');
+                      }
+                      return item && item.url && item.url.startsWith('http');
+                    })
+                    .map((item: string | GalleryImage, index: number) => {
+                      const imageUrl = typeof item === 'string' ? item : item.url;
+                      const imageAlt = typeof item === 'string' ? `${name} van ${index + 1}` : item.alt;
+                      
+                      return (
+                        <Box
+                          key={index}
+                          onClick={() => handleImageClick(imageUrl)}
+                          sx={{
+                            cursor: 'pointer',
+                            borderRadius: 2,
+                            overflow: 'hidden',
+                            aspectRatio: '4/3',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                              transform: 'scale(1.05)',
+                              boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                            },
+                          }}
+                        >
+                          <StyledGalleryImage
+                            src={imageUrl}
+                            alt={imageAlt}
+                          />
+                        </Box>
+                      );
+                    })}
+                </Box>
+
+                {/* Enlarged Image Modal */}
+                {enlargedImage && (
+                  <Modal
+                    open={!!enlargedImage}
+                    onClose={handleCloseEnlarged}
+                    closeAfterTransition
+                    BackdropProps={{
+                      style: {
+                        backdropFilter: 'blur(8px)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                      },
+                    }}
+                  >
+                    <Fade in={!!enlargedImage}>
                       <Box
                         sx={{
-                          border: '1px solid',
-                          borderColor: 'divider',
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          maxWidth: '90vw',
+                          maxHeight: '90vh',
+                          outline: 'none',
                           borderRadius: 2,
-                          p: 3,
-                          height: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          '&:hover': {
-                            boxShadow: 3,
-                            borderColor: 'primary.main',
-                          },
+                          overflow: 'hidden',
+                          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
                         }}
                       >
-                        <Typography variant="h6" gutterBottom>{tier.name}</Typography>
-                        <Typography variant="h4" color="primary" gutterBottom>
-                          ${tier.price.toLocaleString()}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" paragraph>
-                          {tier.description}
-                        </Typography>
-                        <Box sx={{ mt: 'auto' }}>
-                          <Typography variant="subtitle2" gutterBottom>Includes:</Typography>
-                          <List dense disablePadding>
-                            {tier.features.map((feature, i) => (
-                              <ListItem key={i} disableGutters disablePadding sx={{ py: 0.5 }}>
-                                <ListItemIcon sx={{ minWidth: 32 }}>
-                                  <CheckIcon color="primary" fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText primary={feature} />
-                              </ListItem>
-                            ))}
-                          </List>
+                        <Box sx={{ position: 'relative' }}>
+                          <StyledGalleryImage
+                            src={enlargedImage}
+                            alt={`${name} - Enlarged`}
+                            style={{
+                              width: '100%',
+                              height: 'auto',
+                              maxHeight: '90vh',
+                              objectFit: 'contain',
+                              display: 'block',
+                            }}
+                          />
+                          <IconButton
+                            onClick={handlePrevImage}
+                            sx={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: 16,
+                              transform: 'translateY(-50%)',
+                              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                              color: 'white',
+                              '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                              },
+                            }}
+                          >
+                            <ArrowBackIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={handleNextImage}
+                            sx={{
+                              position: 'absolute',
+                              top: '50%',
+                              right: 16,
+                              transform: 'translateY(-50%)',
+                              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                              color: 'white',
+                              '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                              },
+                            }}
+                          >
+                            <ArrowForwardIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={handleCloseEnlarged}
+                            sx={{
+                              position: 'absolute',
+                              top: 16,
+                              right: 80,
+                              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                              color: 'white',
+                              '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                              },
+                            }}
+                          >
+                            <CloseIcon />
+                          </IconButton>
                         </Box>
                       </Box>
-                    </div>
-                  ))}
-                </div>
-              </Box>
-            )}
-          </Box>
-        );
-
-      case 2: // Gallery
-        return (
-          <Box>
-            {gallery.length > 0 ? (
-              <Box>
-                <Box sx={{ mb: 3, borderRadius: 2, overflow: 'hidden', height: 400 }}>
-                  <img
-                    src={mainImage}
-                    alt={name}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      borderRadius: 8,
-                    }}
-                  />
-                </Box>
-                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 2 }}>
-                  {gallery.map((img, index) => (
-                    <Box
-                      key={index}
-                      onClick={() => setMainImage(img)}
-                      sx={{
-                        cursor: 'pointer',
-                        border: `2px solid ${mainImage === img ? 'primary.main' : 'transparent'}`,
-                        borderRadius: 1,
-                        overflow: 'hidden',
-                        '&:hover': {
-                          opacity: 0.8,
-                        },
-                      }}
-                    >
-                      <img
-                        src={img}
-                        alt={`${name} - ${index + 1}`}
-                        style={{
-                          width: '100%',
-                          height: 100,
-                          objectFit: 'cover',
-                        }}
-                      />
-                    </Box>
-                  ))}
-                </Box>
+                    </Fade>
+                  </Modal>
+                )}
               </Box>
             ) : (
               <Box
@@ -284,10 +388,11 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
                   minHeight: 300,
                   bgcolor: 'action.hover',
                   borderRadius: 2,
+                  p: 4,
                 }}
               >
-                <GalleryIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
-                <Typography variant="h6" color="text.secondary">
+                <GalleryIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+                <Typography variant="h6" color="text.secondary" gutterBottom>
                   No gallery images available
                 </Typography>
               </Box>
@@ -331,7 +436,6 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
             sx={{ borderBottom: 1, borderColor: 'divider' }}
           >
             <Tab label="Overview" />
-            <Tab label="Pricing" />
             <Tab label="Gallery" />
           </Tabs>
 
@@ -352,20 +456,21 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
             }}
           >
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-              {phone && (
+              {/* Always show phone icon */}
+              <Tooltip title={phone ? `Call ${phone}` : "Contact via email"}>
                 <Button
                   variant="outlined"
-                  startIcon={<PhoneIcon />}
+                  startIcon={<PhoneIcon sx={{ fontSize: 18, mr: 1 }} />}
                   component="a"
-                  href={`tel:${phone}`}
+                  href={phone ? `tel:${phone}` : `mailto:${email}`}
                 >
-                  Call
+                  {phone ? phone : 'Contact'}
                 </Button>
-              )}
+              </Tooltip>
               {email && (
                 <Button
                   variant="outlined"
-                  startIcon={<EmailIcon />}
+                  startIcon={<EmailIcon sx={{ fontSize: 18, mr: 1 }} />}
                   component="a"
                   href={`mailto:${email}`}
                 >
@@ -375,7 +480,7 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
               {website && (
                 <Button
                   variant="outlined"
-                  startIcon={<WebsiteIcon />}
+                  startIcon={<WebsiteIcon sx={{ fontSize: 18, mr: 1 }} />}
                   component="a"
                   href={website}
                   target="_blank"
@@ -387,49 +492,101 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
             </Box>
 
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {socialMedia?.facebook && (
-                <IconButton
-                  component="a"
-                  href={socialMedia.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="primary"
-                >
-                  <FacebookIcon />
-                </IconButton>
+              {socialMedia?.youtube && (
+                <Tooltip title="YouTube Channel">
+                  <IconButton
+                    component="a"
+                    href={socialMedia.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ 
+                      bgcolor: alpha(theme.palette.primary.main, 0.1),
+                      borderRadius: '50%',
+                      width: 40,
+                      height: 40,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:hover': {
+                        bgcolor: theme.palette.primary.main,
+                        color: 'white',
+                        transform: 'scale(1.1)'
+                      }
+                    }}
+                  >
+                    <YouTube />
+                  </IconButton>
+                </Tooltip>
               )}
               {socialMedia?.instagram && (
-                <IconButton
-                  component="a"
-                  href={socialMedia.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="primary"
-                >
-                  <InstagramIcon />
-                </IconButton>
+                <Tooltip title="Instagram Profile">
+                  <IconButton
+                    component="a"
+                    href={socialMedia.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ 
+                      bgcolor: alpha(theme.palette.primary.main, 0.1),
+                      borderRadius: '50%',
+                      width: 40,
+                      height: 40,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:hover': {
+                        bgcolor: theme.palette.primary.main,
+                        color: 'white',
+                        transform: 'scale(1.1)'
+                      }
+                    }}
+                  >
+                    <Instagram />
+                  </IconButton>
+                </Tooltip>
               )}
-              {socialMedia?.youtube && (
-                <IconButton
-                  component="a"
-                  href={socialMedia.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="primary"
-                >
-                  <YouTubeIcon />
-                </IconButton>
+              {socialMedia?.facebook && (
+                <Tooltip title="Facebook Page">
+                  <IconButton
+                    component="a"
+                    href={socialMedia.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ 
+                      bgcolor: alpha(theme.palette.primary.main, 0.1),
+                      borderRadius: '50%',
+                      width: 40,
+                      height: 40,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:hover': {
+                        bgcolor: theme.palette.primary.main,
+                        color: 'white',
+                        transform: 'scale(1.1)'
+                      }
+                    }}
+                  >
+                    <FacebookIcon />
+                  </IconButton>
+                </Tooltip>
               )}
               {socialMedia?.pinterest && (
-                <IconButton
-                  component="a"
-                  href={socialMedia.pinterest}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="primary"
-                >
-                  <PinterestIcon />
-                </IconButton>
+                <Tooltip title="Pinterest Profile">
+                  <IconButton
+                    component="a"
+                    href={socialMedia.pinterest}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ 
+                      bgcolor: alpha(theme.palette.primary.main, 0.1),
+                      borderRadius: '50%',
+                      width: 40,
+                      height: 40,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:hover': {
+                        bgcolor: theme.palette.primary.main,
+                        color: 'white',
+                        transform: 'scale(1.1)'
+                      }
+                    }}
+                  >
+                    <PinterestIcon />
+                  </IconButton>
+                </Tooltip>
               )}
             </Box>
           </Box>

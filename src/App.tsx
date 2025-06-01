@@ -5,7 +5,6 @@ import {
   Container, 
   Box, 
   Typography, 
-  CircularProgress,
   Tabs,
   Tab,
   Button,
@@ -21,9 +20,10 @@ import {
 } from '@mui/material';
 import { getGoogleMapsApiKey } from './utils/apiUtils';
 import { scrollToElement } from './utils/scrollUtils';
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
+import SimpleMapView from './components/SimpleMapView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import MapIcon from '@mui/icons-material/Map';
+import ClearIcon from '@mui/icons-material/Clear';
 import { 
   StateSelector, 
   BuilderCard, 
@@ -34,6 +34,7 @@ import {
   SkeletonLoader,
 } from './components';
 import GoogleSheetBuildersList from './components/GoogleSheetBuildersList';
+import CustomGoogleMap from './components/CustomGoogleMap';
 import SecureImage from './components/SecureImage';
 import SecureMarker from './components/SecureMarker';
 import { Location } from './types';
@@ -44,6 +45,7 @@ import {
 } from './hooks';
 import { jsonDataService } from './services/jsonDataService';
 import { Builder } from './services/googleSheetsService';
+import { useJsApiLoader } from '@react-google-maps/api';
 
 const createHumbleRoadBuilder = (): Builder => ({
   id: 'nj-1',
@@ -70,9 +72,21 @@ const createHumbleRoadBuilder = (): Builder => ({
     facebook: 'HumbleRoadLLC',
   },
   gallery: [
-    'https://images.squarespace-cdn.com/content/v1/5d7f95ea7d3be50012ad8e2d/1626285444291-DSCF9146.jpg',
-    'https://images.squarespace-cdn.com/content/v1/5d7f95ea7d3be50012ad8e2d/1626285444291-DSCF9147.jpg',
-    'https://images.squarespace-cdn.com/content/v1/5d7f95ea7d3be50012ad8e2d/1626285444291-DSCF9148.jpg',
+    {
+      url: 'https://images.squarespace-cdn.com/content/v1/5d7f95ea7d3be50012ad8e2d/1626285444291-DSCF9146.jpg',
+      alt: 'Humble Road van conversion interior',
+      caption: 'Interior view of Humble Road van conversion'
+    },
+    {
+      url: 'https://images.squarespace-cdn.com/content/v1/5d7f95ea7d3be50012ad8e2d/1626285444291-DSCF9147.jpg',
+      alt: 'Humble Road van conversion exterior',
+      caption: 'Exterior view of Humble Road van conversion'
+    },
+    {
+      url: 'https://images.squarespace-cdn.com/content/v1/5d7f95ea7d3be50012ad8e2d/1626285444291-DSCF9148.jpg',
+      alt: 'Humble Road van conversion kitchen',
+      caption: 'Kitchen area of Humble Road van conversion'
+    },
   ],
 });
 
@@ -104,9 +118,21 @@ const MOCK_BUILDERS: Record<string, Builder[]> = {
         youtube: 'vanlifecustoms',
       },
       gallery: [
-        'https://example.com/van1.jpg',
-        'https://example.com/van2.jpg',
-        'https://example.com/van3.jpg',
+        {
+          url: 'https://example.com/van1.jpg',
+          alt: 'Vanlife Customs van conversion interior',
+          caption: 'Interior view of Vanlife Customs van conversion'
+        },
+        {
+          url: 'https://example.com/van2.jpg',
+          alt: 'Vanlife Customs van conversion exterior',
+          caption: 'Exterior view of Vanlife Customs van conversion'
+        },
+        {
+          url: 'https://example.com/van3.jpg',
+          alt: 'Vanlife Customs van conversion kitchen',
+          caption: 'Kitchen area of Vanlife Customs van conversion'
+        },
       ],
     },
   ],
@@ -208,20 +234,49 @@ const App = () => {
   // Load Google Maps API with secure key handling
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: getGoogleMapsApiKey(),
+    libraries: ['places'], // Add places library for better functionality
+    version: "3.55", // Use a specific stable version
+    region: "US", // Set region for better performance
+    language: "en", // Set language
   });
+
+  // Debug API key and loading status
+  useEffect(() => {
+    const apiKey = getGoogleMapsApiKey();
+    console.log('🗝️ Google Maps API Debug:', {
+      hasKey: !!apiKey && apiKey !== 'MISSING_API_KEY',
+      keyLength: apiKey ? apiKey.length : 0,
+      keyPrefix: apiKey ? apiKey.substring(0, 10) + '...' : 'NONE',
+      isLoaded,
+      loadError: loadError?.message || 'None',
+      windowGoogle: typeof window !== 'undefined' && !!window.google,
+      googleMaps: typeof window !== 'undefined' && !!window.google?.maps
+    });
+    
+    if (loadError) {
+      console.error('🚨 Google Maps Load Error:', loadError);
+    }
+    
+    if (isLoaded) {
+      console.log('✅ Google Maps API loaded successfully');
+    }
+  }, [isLoaded, loadError]);
 
   // Use custom hooks
   const { mode, toggleThemeMode } = useThemeMode();
-  const { recentlyViewed, addToRecentlyViewed } = useRecentlyViewed();
+  const { recentlyViewed, addToRecentlyViewed, clearRecentlyViewed } = useRecentlyViewed();
   const scrollToResults = useScrollToResults();
 
-  // State management - start with no state selected for clean home screen
+  // State management
   const [selectedState, setSelectedState] = useState<string>('');
+  const [selectedZipCode, setSelectedZipCode] = useState<string>('');
+  const [searchedBuilderName, setSearchedBuilderName] = useState<string>('');
+  const [isZoomedToBuilder, setIsZoomedToBuilder] = useState<boolean>(false);
+  const [builders, setBuilders] = useState<Builder[]>([]);
   const [buildersByState, setBuildersByState] = useState<Record<string, Builder[]>>({});
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 }); // Center of US
+  const [showMap, setShowMap] = useState(false);
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 40.0583, lng: -74.4057 }); // Default to NJ center
   const [selectedBuilder, setSelectedBuilder] = useState<Builder | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -241,11 +296,8 @@ const App = () => {
   useEffect(() => {
     const fetchBuilders = async () => {
       try {
-        setLoading(true);
-        setError(null);
-        
-        // Fetch all builders from JSON data service
         const allBuilders = await jsonDataService.getBuilders();
+        console.log('🏗️ App: Total builders fetched:', allBuilders.length);
         
         // Organize builders by state
         const buildersByStateData: Record<string, Builder[]> = {};
@@ -257,44 +309,231 @@ const App = () => {
           buildersByStateData[state].push(builder);
         });
         
+        console.log('🗺️ App: Builders organized by state:', Object.keys(buildersByStateData).map(state => 
+          `${state}: ${buildersByStateData[state].length}`
+        ).join(', '));
+        
+        const totalBuilders = Object.values(buildersByStateData).reduce((acc, builders) => acc + builders.length, 0);
+        console.log('📊 App: Total builder count for homepage:', totalBuilders);
+        
         setBuildersByState(buildersByStateData);
+        setBuilders(allBuilders);
       } catch (err) {
         console.error('🚨 Error fetching builders:', err);
-        setError('Failed to fetch builders. Please try again later.');
-      } finally {
-        setLoading(false);
       }
     };
     
     fetchBuilders();
-  }, []);  // Only run on component mount to avoid re-fetching when state changes
+  }, []);  
 
   // Handle state selection
-  const handleStateSelect = useCallback((state: string) => {
-    console.log('State selected:', state);
+  const handleStateSelect = useCallback(async (state: string) => {
+    console.log('🏛️ State selected:', state);
     setSelectedState(state);
-    scrollToResults();
+    setSelectedZipCode(''); // Clear zip code when selecting state
+    setSearchedBuilderName(''); // Clear builder name when selecting state
+    setIsZoomedToBuilder(false); // Reset zoom state
     
+    if (!state) {
+      return;
+    }
+
     // Update map center based on the new selected state
     if (buildersByState[state] && buildersByState[state].length > 0) {
       const builders = buildersByState[state];
-      const totalLat = builders.reduce((sum, b) => sum + b.location.lat, 0);
-      const totalLng = builders.reduce((sum, b) => sum + b.location.lng, 0);
+      const validBuilders = builders.filter(b => 
+        b.location?.lat && b.location?.lng && 
+        !isNaN(b.location.lat) && !isNaN(b.location.lng)
+      );
       
-      setMapCenter({
-        lat: totalLat / builders.length,
-        lng: totalLng / builders.length
-      });
-      
-      console.log(`🗺️ Map center updated for ${state}: ${totalLat / builders.length}, ${totalLng / builders.length}`);
-    } else if (state === 'New Jersey') {
-      // Default center for New Jersey if no builders found
-      setMapCenter({
-        lat: 40.0583,
-        lng: -74.4057
-      });
+      if (validBuilders.length > 0) {
+        const totalLat = validBuilders.reduce((sum, b) => sum + b.location.lat, 0);
+        const totalLng = validBuilders.reduce((sum, b) => sum + b.location.lng, 0);
+        
+        setMapCenter({
+          lat: totalLat / validBuilders.length,
+          lng: totalLng / validBuilders.length
+        });
+        
+        console.log(`🗺️ Map center updated for ${state}: ${totalLat / validBuilders.length}, ${totalLng / validBuilders.length}`);
+      } else {
+        // Fallback to state default center if no valid coordinates
+        setMapCenter(getStateDefaultCenter(state));
+      }
+    } else {
+      // No builders found, use state default center
+      setMapCenter(getStateDefaultCenter(state));
     }
+    
+    scrollToResults();
   }, [buildersByState, scrollToResults]);
+
+  // Handle builder name search
+  const handleBuilderNameSearch = useCallback((builderName: string) => {
+    console.log('🔍 Builder name search:', builderName);
+    setSearchedBuilderName(builderName);
+    setSelectedState(''); // Clear state when searching by builder name
+    setSelectedZipCode(''); // Clear zip code when searching by builder name
+    setIsZoomedToBuilder(false); // Reset zoom state
+    scrollToResults();
+  }, [scrollToResults]);
+
+  // Handle zip code search
+  const handleZipCodeSelect = useCallback(async (zipCode: string) => {
+    console.log('📍 Zip code search:', zipCode);
+    setSelectedZipCode(zipCode);
+    setSelectedState(''); // Clear state when searching by zip code
+    setSearchedBuilderName(''); // Clear builder name when searching by zip code
+    setIsZoomedToBuilder(false); // Reset zoom state
+    
+    if (!zipCode) {
+      return;
+    }
+
+    try {
+      // Use Google Maps Geocoding API to get coordinates for the zip code
+      if (window.google && window.google.maps) {
+        const geocoder = new window.google.maps.Geocoder();
+        
+        geocoder.geocode({ address: zipCode + ', USA' }, (results, status) => {
+          if (status === 'OK' && results && results[0]) {
+            const location = results[0].geometry.location;
+            const zipLat = location.lat();
+            const zipLng = location.lng();
+            
+            console.log(`📍 Zip code ${zipCode} coordinates:`, zipLat, zipLng);
+            
+            // Set map center to zip code location
+            setMapCenter({ lat: zipLat, lng: zipLng });
+            
+            // Find builders within 100 miles of the zip code
+            const nearbyBuildersWithDistance = builders
+              .map(builder => {
+                if (!builder.location?.lat || !builder.location?.lng) return null;
+                
+                const distance = calculateDistance(
+                  zipLat, zipLng,
+                  builder.location.lat, builder.location.lng
+                );
+                
+                // Add distance information to the builder
+                const builderWithDistance: Builder = {
+                  ...builder,
+                  distanceFromZip: {
+                    miles: Math.round(distance * 10) / 10, // Round to 1 decimal place
+                    zipCode: zipCode
+                  }
+                };
+                
+                return { builder: builderWithDistance, distance };
+              })
+              .filter((item): item is { builder: Builder; distance: number } => 
+                item !== null && item.distance <= 100
+              )
+              .sort((a, b) => a.distance - b.distance)
+              .map(item => item.builder);
+            
+            console.log(`🏗️ Found ${nearbyBuildersWithDistance.length} builders within 100 miles of ${zipCode}`);
+            
+            // Update builders list with nearby builders
+            setBuildersByState({ [zipCode]: nearbyBuildersWithDistance });
+            
+            setSnackbarMessage(`Found ${nearbyBuildersWithDistance.length} builders within 100 miles of ${zipCode}`);
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+          } else {
+            console.error('❌ Geocoding failed:', status);
+            setSnackbarMessage(`Could not find location for zip code ${zipCode}`);
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+          }
+        });
+      } else {
+        console.error('❌ Google Maps API not available');
+        setSnackbarMessage('Location services not available');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error('❌ Error in zip code search:', error);
+      setSnackbarMessage('Error searching by zip code');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
+    
+    scrollToResults();
+  }, [builders, scrollToResults]);
+
+  // Calculate distance between two coordinates using Haversine formula
+  const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
+    const R = 3959; // Radius of Earth in miles
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLng/2) * Math.sin(dLng/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
+  // Helper function to get default center for states
+  const getStateDefaultCenter = (state: string): { lat: number; lng: number } => {
+    const stateDefaults: Record<string, { lat: number; lng: number }> = {
+      'Alabama': { lat: 32.3617, lng: -86.2792 },
+      'Alaska': { lat: 64.0685, lng: -152.2782 },
+      'Arizona': { lat: 34.2744, lng: -111.2847 },
+      'Arkansas': { lat: 34.7519, lng: -92.1313 },
+      'California': { lat: 36.7783, lng: -119.4179 },
+      'Colorado': { lat: 39.5501, lng: -105.7821 },
+      'Connecticut': { lat: 41.6032, lng: -73.0877 },
+      'Florida': { lat: 27.7663, lng: -82.6404 },
+      'Georgia': { lat: 32.1656, lng: -82.9001 },
+      'Hawaii': { lat: 19.8968, lng: -155.5828 },
+      'New Jersey': { lat: 40.0583, lng: -74.4057 },
+      'New York': { lat: 42.1657, lng: -74.9481 },
+      'Texas': { lat: 31.9686, lng: -99.9018 },
+      'Washington': { lat: 47.7511, lng: -120.7401 },
+      // Add more as needed
+    };
+    
+    return stateDefaults[state] || { lat: 39.8283, lng: -98.5795 }; // Default to US center
+  };
+
+  // Handle clearing all search results
+  const handleClearResults = useCallback(() => {
+    setSelectedState('');
+    setSearchedBuilderName('');
+    setSelectedZipCode('');
+    setBuildersByState({});
+    setMapCenter({ lat: 39.8283, lng: -98.5795 }); // Reset to US center
+    setIsZoomedToBuilder(false); // Reset zoom state
+  }, []);
+
+  // Handle zooming to a specific builder location
+  const handleZoomToBuilder = useCallback((builder: Builder) => {
+    if (builder.location?.lat && builder.location?.lng) {
+      // Switch to map view
+      setActiveTab(1);
+      
+      // Set zoom to builder flag
+      setIsZoomedToBuilder(true);
+      
+      // Center map on builder location with high zoom
+      setMapCenter({
+        lat: builder.location.lat,
+        lng: builder.location.lng
+      });
+      
+      // Scroll to map section
+      scrollToResults();
+      
+      // Optional: Show success message
+      setSnackbarMessage(`Zoomed to ${builder.name} in ${builder.location.city}, ${builder.location.state}`);
+      setSnackbarSeverity('info');
+      setSnackbarOpen(true);
+    }
+  }, [scrollToResults]);
 
   // Handle builder modal
   const handleViewDetails = useCallback((builder: Builder) => {
@@ -315,74 +554,6 @@ const App = () => {
 
   // Create theme based on current mode
   const theme = useMemo(() => getTheme(mode), [mode]);
-
-  // Show loading state for Google Maps
-  if (loadError) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-          <Alert severity="error">
-            Error loading Google Maps. Please check your internet connection and try again.
-          </Alert>
-        </Container>
-      </ThemeProvider>
-    );
-  }
-
-  if (!isLoaded) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-          <Box 
-            display="flex" 
-            flexDirection="column" 
-            justifyContent="center" 
-            alignItems="center" 
-            minHeight="50vh"
-            textAlign="center"
-          >
-            <CircularProgress size={60} thickness={4} sx={{ mb: 4 }} />
-            <Typography 
-              variant="h5" 
-              component="h2" 
-              sx={{ 
-                mb: 2, 
-                fontWeight: 600,
-                color: 'primary.main'
-              }}
-            >
-              Loading Van Builders Directory...
-            </Typography>
-            <Typography 
-              variant="body1" 
-              sx={{ 
-                mb: 3,
-                color: 'text.secondary',
-                maxWidth: '600px',
-                px: 2
-              }}
-            >
-              Connecting you with the best camper van conversion specialists across the United States. 
-              Your adventure starts here!
-            </Typography>
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              color: 'text.secondary',
-              fontSize: '0.875rem'
-            }}>
-              <Typography variant="body2">
-                🚐 Discover • 🔨 Connect • 🌟 Build Your Dream
-              </Typography>
-            </Box>
-          </Box>
-        </Container>
-      </ThemeProvider>
-    );
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -477,20 +648,41 @@ const App = () => {
         {/* State Selector */}
         <StateSelector 
           onSelectState={handleStateSelect}
+          onSelectBuilderName={handleBuilderNameSearch}
+          onSelectZipCode={handleZipCodeSelect}
+          selectedState={selectedState}
+          selectedBuilderName={searchedBuilderName}
+          selectedZipCode={selectedZipCode}
         />
         
-        {selectedState && (
-          <Box>
+        {(selectedState || searchedBuilderName || selectedZipCode) && (
+          <Box id="search-results">
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 4, mb: 2 }}>
               <Typography variant="h4" component="h3">
-                Builders in {selectedState}
+                {selectedState ? `Builders in ${selectedState}` : searchedBuilderName ? `Search Results for "${searchedBuilderName}"` : `Search Results for "${selectedZipCode}"`}
               </Typography>
               
+              <Button
+                variant="outlined"
+                color="secondary"
+                startIcon={<ClearIcon />}
+                onClick={handleClearResults}
+                sx={{
+                  textTransform: 'none',
+                  borderRadius: 2,
+                  px: 3,
+                  py: 1
+                }}
+              >
+                Clear Results
+              </Button>
+            </Box>
+            
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 4 }}>
               <Tabs 
                 value={activeTab} 
                 onChange={handleTabChange}
                 sx={{ 
-                  mb: 4,
                   '& .MuiTabs-indicator': {
                     height: 4,
                     borderRadius: '4px 4px 0 0',
@@ -498,7 +690,6 @@ const App = () => {
                 }}
                 indicatorColor="primary"
                 textColor="primary"
-                variant="fullWidth"
               >
                 <Tab 
                   label={
@@ -526,50 +717,103 @@ const App = () => {
               // List View
               <GoogleSheetBuildersList 
                 selectedState={selectedState}
+                selectedZipCode={selectedZipCode}
                 onBuilderSelect={handleViewDetails}
+                onZoomToLocation={handleZoomToBuilder}
+                searchedBuilderName={searchedBuilderName}
+                builders={(() => {
+                  if (selectedState && buildersByState[selectedState]) {
+                    return buildersByState[selectedState];
+                  } else if (selectedZipCode && buildersByState[selectedZipCode]) {
+                    return buildersByState[selectedZipCode];
+                  } else if (searchedBuilderName) {
+                    // Search for builders by name across all states
+                    return builders.filter(builder => 
+                      builder.name.toLowerCase().includes(searchedBuilderName.toLowerCase())
+                    );
+                  }
+                  return [];
+                })()}
               />
             ) : (
               // Map View
-              <Box sx={{ height: '600px', borderRadius: 2, overflow: 'hidden' }}>
-                <GoogleMap
-                  key={`${mapCenter.lat}-${mapCenter.lng}`}
-                  mapContainerStyle={{ width: '100%', height: '100%' }}
-                  center={{ lat: mapCenter.lat, lng: mapCenter.lng }}
-                  zoom={8}
-                  options={{
-                    disableDefaultUI: false,
-                    zoomControl: true,
-                    streetViewControl: false,
-                    mapTypeControl: false,
-                    fullscreenControl: true,
-                  }}
-                >
-                  {/* Render map markers for each builder in the selected state */}
-                  {buildersByState[selectedState]?.map((builder) => (
-                    <Marker
-                      key={builder.id}
-                      position={{ lat: builder.location.lat, lng: builder.location.lng }}
-                      title={builder.name}
-                      onClick={() => handleViewDetails(builder)}
-                      icon={{
-                        url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-                        scaledSize: new window.google.maps.Size(15, 15)
-                      }}
-                    />
-                  ))}
+              <Box sx={{ height: '600px', borderRadius: 2, overflow: 'hidden', position: 'relative' }}>
+                {(() => {
+                  // Get builders for the selected state, zip code, or searched builder name
+                  let currentBuilders: Builder[] = [];
                   
-                  {buildersByState[selectedState]?.length > 0 && (
-                    <InfoWindow
-                      position={{ lat: mapCenter.lat + 0.05, lng: mapCenter.lng }}
-                    >
-                      <div>
-                        <Typography variant="body2" fontWeight="bold">
-                          {buildersByState[selectedState].length} builders found in {selectedState}
+                  if (selectedState && buildersByState[selectedState]) {
+                    currentBuilders = buildersByState[selectedState];
+                  } else if (selectedZipCode && buildersByState[selectedZipCode]) {
+                    currentBuilders = buildersByState[selectedZipCode];
+                  } else if (searchedBuilderName) {
+                    currentBuilders = builders.filter(builder => 
+                      builder.name.toLowerCase().includes(searchedBuilderName.toLowerCase())
+                    );
+                  }
+                  
+                  const validBuilders = currentBuilders.filter(builder => {
+                    return builder.location && 
+                           typeof builder.location.lat === 'number' && 
+                           typeof builder.location.lng === 'number' &&
+                           !isNaN(builder.location.lat) && 
+                           !isNaN(builder.location.lng);
+                  });
+                  
+                  console.log('🗺️ Map Render Debug:', {
+                    selectedState,
+                    selectedZipCode,
+                    searchedBuilderName,
+                    currentBuildersCount: currentBuilders.length,
+                    validBuildersCount: validBuilders.length,
+                    mapCenter,
+                    isLoaded,
+                    loadError: loadError?.message || 'None',
+                    validBuilders: validBuilders.map(b => ({
+                      name: b.name,
+                      lat: b.location.lat,
+                      lng: b.location.lng,
+                      city: b.location.city,
+                      state: b.location.state
+                    }))
+                  });
+                  
+                  if (loadError) {
+                    console.error('🚨 Map Load Error Details:', loadError);
+                    return (
+                      <Box sx={{ p: 4, textAlign: 'center' }}>
+                        <Typography variant="h6" color="error" gutterBottom>
+                          Map Loading Error
                         </Typography>
-                      </div>
-                    </InfoWindow>
-                  )}
-                </GoogleMap>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                          {loadError.message}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Please check browser console for more details.
+                        </Typography>
+                      </Box>
+                    );
+                  }
+                  
+                  if (!isLoaded) {
+                    return (
+                      <Box sx={{ p: 4, textAlign: 'center' }}>
+                        <Typography variant="body1">Loading Google Maps API...</Typography>
+                      </Box>
+                    );
+                  }
+                  
+                  return (
+                    <CustomGoogleMap
+                      builders={validBuilders}
+                      center={{ lat: mapCenter.lat, lng: mapCenter.lng }}
+                      zoom={isZoomedToBuilder ? 14 : selectedState ? 8 : selectedZipCode && !isZoomedToBuilder ? undefined : 6}
+                      fitBounds={Boolean(selectedZipCode && !isZoomedToBuilder)}
+                      onMarkerClick={handleViewDetails}
+                      isLoaded={isLoaded}
+                    />
+                  );
+                })()}
               </Box>
             )}
           </Box>
@@ -582,10 +826,7 @@ const App = () => {
           <RecentlyViewedSection 
             recentlyViewed={recentlyViewed} 
             onViewDetails={handleViewDetails} 
-            onClearAll={() => {
-              localStorage.removeItem('recentlyViewed');
-              window.location.reload();
-            }} 
+            onClearAll={clearRecentlyViewed} 
           />
         </Container>
       )}
@@ -657,7 +898,7 @@ const App = () => {
           }}>
             <Box sx={{ textAlign: 'center' }}>
               <Typography variant="h3" sx={{ color: '#64b5f6', fontWeight: 'bold' }}>
-                {Object.values(buildersByState).reduce((acc, builders) => acc + builders.length, 0)}
+                {builders.length}
               </Typography>
               <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                 Builders Listed
@@ -688,7 +929,7 @@ const App = () => {
               fontStyle: 'italic'
             }}
           >
-            🚐 Start your journey today - Select a state above to explore builders in your area
+            🚐 Start your journey today - Select a state, zip code, or builder name above to explore builders in your area
           </Typography>
         </Paper>
       </Container>

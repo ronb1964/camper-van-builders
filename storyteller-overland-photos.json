@@ -1,0 +1,37 @@
+{
+  "builder": "Storyteller Overland",
+  "url": "https://www.storytelleroverland.com",
+  "timestamp": "2025-06-01T08:35:49.880Z",
+  "totalFound": 11,
+  "uniqueSelected": 3,
+  "galleryLinks": [],
+  "images": [
+    {
+      "src": "https://ucarecdn.com/c394723b-6e7f-4003-bd70-24fb88b7a8b7/-/format/auto/-/preview/120x120/-/quality/lighter/Group%2024%20_2_.jpg",
+      "alt": "",
+      "title": "",
+      "width": 2560,
+      "height": 800,
+      "className": "gf_lazyload",
+      "parentText": ""
+    },
+    {
+      "src": "https://ucarecdn.com/e2437957-0993-47a8-b86b-ce16d27c5344/-/format/auto/-/preview/2560x2560/-/quality/lighter/DSC02721%20edit-mobile.webp",
+      "alt": "",
+      "title": "",
+      "width": 1920,
+      "height": 829,
+      "className": "gf_lazyload gf_lazyloaded gf_lazyload_done",
+      "parentText": ""
+    },
+    {
+      "src": "https://ucarecdn.com/d94f96c7-802f-4991-9b4e-aa3fd5cd7486/-/format/auto/-/preview/480x480/-/quality/lighter/Rebate-Badge-May-2025.png",
+      "alt": "",
+      "title": "",
+      "width": 451,
+      "height": 480,
+      "className": "gf_image gf_lazyload gf_lazyloaded gf_lazyload_done",
+      "parentText": ""
+    }
+  ]
+}

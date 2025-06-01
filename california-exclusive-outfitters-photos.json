@@ -1,0 +1,88 @@
+{
+  "builder": "Exclusive Outfitters",
+  "website": "https://www.exclusiveoutfitters.com/",
+  "extractedAt": "2025-06-01T10:55:49.385Z",
+  "totalImages": 10,
+  "images": [
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/1_174be5dd-f5c5-41d1-8eb9-9d0fdb412a40.jpg?crop=center&height=691&v=1719186406&width=1036",
+      "alt": "Model A",
+      "width": 3558,
+      "height": 2372,
+      "className": "no-js-hidden product-first-image",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/1_1.jpg?crop=center&height=691&v=1719465668&width=1036",
+      "alt": "Model B",
+      "width": 3558,
+      "height": 2372,
+      "className": "no-js-hidden product-first-image",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/1revised.jpg?crop=center&height=691&v=1719465838&width=1036",
+      "alt": "Model C",
+      "width": 3558,
+      "height": 2372,
+      "className": "no-js-hidden product-first-image",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/1_1_a4cdb500-5a65-4714-a816-f2d7157903eb.jpg?crop=center&height=691&v=1719465893&width=1036",
+      "alt": "Model D",
+      "width": 3558,
+      "height": 2372,
+      "className": "no-js-hidden product-first-image",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/Photo_Dec_14_2021_3_06_51_PM.jpg?crop=center&height=1&v=1706778156&width=1",
+      "alt": "",
+      "width": 1920,
+      "height": 2882,
+      "className": "no-js-hidden",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/Photo_May_26_2022_1_38_12_PM.jpg?crop=center&height=1&v=1713933518&width=1",
+      "alt": "",
+      "width": 1920,
+      "height": 2882,
+      "className": "no-js-hidden",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/Photo_May_26_2022_5_50_03_PM.jpg?crop=center&height=1&v=1713934003&width=1",
+      "alt": "",
+      "width": 1920,
+      "height": 2882,
+      "className": "no-js-hidden",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/Photo_Aug_07_2022_9_18_19_AM.jpg?crop=center&height=1&v=1706777399&width=1",
+      "alt": "",
+      "width": 1920,
+      "height": 1920,
+      "className": "no-js-hidden",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/Photo_Dec_31_2022_9_18_55_AM.jpg?crop=center&height=1&v=1713932901&width=1",
+      "alt": "",
+      "width": 1920,
+      "height": 1920,
+      "className": "no-js-hidden",
+      "id": ""
+    },
+    {
+      "src": "https://www.exclusiveoutfitters.com/cdn/shop/files/Photo_Aug_25_2022_3_10_22_PM.jpg?crop=center&height=1&v=1706777052&width=1",
+      "alt": "",
+      "width": 1920,
+      "height": 1530,
+      "className": "no-js-hidden",
+      "id": ""
+    }
+  ]
+}

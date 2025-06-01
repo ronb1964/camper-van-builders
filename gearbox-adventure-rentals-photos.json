@@ -1,0 +1,82 @@
+{
+  "builder": "Gearbox Adventure Rentals",
+  "url": "https://www.gearboxrentals.com",
+  "timestamp": "2025-06-01T08:35:59.207Z",
+  "totalFound": 11,
+  "uniqueSelected": 8,
+  "galleryLinks": [],
+  "images": [
+    {
+      "src": "https://images.squarespace-cdn.com/content/v1/5b53f62a96e76fb729231c9b/1704517483238-5TPEP3UHXVLMAK5NOT4N/California_95.JPG?format=2500w",
+      "alt": "California_95.JPG",
+      "title": "",
+      "width": 2500,
+      "height": 1667,
+      "className": "loaded",
+      "parentText": "\n              \n            "
+    },
+    {
+      "src": "https://images.squarespace-cdn.com/content/v1/5b53f62a96e76fb729231c9b/1647058109268-12QV2HRW85MV60X7F812/jose-martin-ramirez-carrasco-45sjAjSjArQ-unsplashdarker.jpg?format=2500w",
+      "alt": "jose-martin-ramirez-carrasco-45sjAjSjArQ-unsplashdarker.jpg",
+      "title": "",
+      "width": 2500,
+      "height": 1667,
+      "className": "",
+      "parentText": "\n              \n            "
+    },
+    {
+      "src": "https://images.squarespace-cdn.com/content/v1/5b53f62a96e76fb729231c9b/1593052810602-VUGT1VHIKVTGLX9QV1JB/IMG_9677.jpg?format=2500w",
+      "alt": "IMG_9677.jpg",
+      "title": "",
+      "width": 2500,
+      "height": 1145,
+      "className": "",
+      "parentText": "\n              \n            "
+    },
+    {
+      "src": "https://images.squarespace-cdn.com/content/v1/5b53f62a96e76fb729231c9b/1593015541032-NJ3LAF86Y93GHBO9XSLX/Edit-7346.jpg?format=2500w",
+      "alt": "Edit-7346.jpg",
+      "title": "",
+      "width": 2500,
+      "height": 817,
+      "className": "",
+      "parentText": "\n              \n            "
+    },
+    {
+      "src": "https://images.squarespace-cdn.com/content/v1/5b53f62a96e76fb729231c9b/24c65ebf-6c91-428d-8cdb-232bb2e93f0f/8B6A3215.jpg?format=750w",
+      "alt": "8B6A3215.jpg",
+      "title": "",
+      "width": 750,
+      "height": 500,
+      "className": "loaded",
+      "parentText": "\n          \n        "
+    },
+    {
+      "src": "https://images.squarespace-cdn.com/content/v1/5b53f62a96e76fb729231c9b/c2cc6bcd-bf1e-4ab0-888f-0ccb086be461/Experience+Freedom+Small.png",
+      "alt": "",
+      "title": "",
+      "width": 640,
+      "height": 279,
+      "className": "loaded",
+      "parentText": "\n                \n                \n                \n                \n                \n              "
+    },
+    {
+      "src": "https://images.squarespace-cdn.com/content/v1/5b53f62a96e76fb729231c9b/90768487-f6f2-4be5-85ff-dd7a533818e8/Make+memories.png",
+      "alt": "",
+      "title": "",
+      "width": 640,
+      "height": 278,
+      "className": "loaded",
+      "parentText": "\n                \n                \n                \n                \n                \n              "
+    },
+    {
+      "src": "https://images.squarespace-cdn.com/content/v1/5b53f62a96e76fb729231c9b/bfdf8e70-d275-4379-a9f9-a269b3a3e350/escape+stress.png",
+      "alt": "",
+      "title": "",
+      "width": 640,
+      "height": 278,
+      "className": "loaded",
+      "parentText": "\n                \n                \n                \n                \n                \n              "
+    }
+  ]
+}

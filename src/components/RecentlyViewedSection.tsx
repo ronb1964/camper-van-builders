@@ -4,17 +4,16 @@ import {
   Typography,
   Card,
   CardContent,
-  CardMedia,
   CardActionArea,
   Chip,
-  Rating,
   Button,
   useTheme,
   alpha,
   Stack
 } from '@mui/material';
 import HistoryIcon from '@mui/icons-material/History';
-import ClearAllIcon from '@mui/icons-material/ClearAll';
+import ClearIcon from '@mui/icons-material/Clear';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Builder } from '../types';
 
 interface RecentlyViewedSectionProps {
@@ -56,12 +55,19 @@ const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
         </Typography>
         {recentlyViewed.length > 0 && (
           <Button 
-            startIcon={<ClearAllIcon />} 
+            variant="outlined"
+            color="secondary"
+            startIcon={<ClearIcon />} 
             onClick={onClearAll}
             size="small"
-            color="secondary"
+            sx={{
+              textTransform: 'none',
+              borderRadius: 2,
+              px: 2,
+              py: 0.5
+            }}
           >
-            Clear All
+            Clear Recents
           </Button>
         )}
       </Box>
@@ -82,44 +88,68 @@ const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
               }}
             >
               <CardActionArea onClick={() => onViewDetails(builder)}>
-                <CardMedia
-                  component="div"
+                <Box
                   sx={{
-                    height: 120,
-                    bgcolor: alpha(theme.palette.primary.main, 0.1),
+                    height: 80,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: theme.palette.primary.main
+                    background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${alpha(theme.palette.primary.dark, 0.9)} 100%)`,
+                    color: 'white',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    transition: 'all 0.3s ease-in-out',
+                    textAlign: 'center',
+                    px: 1.5,
+                    borderRadius: '8px 8px 0 0',
+                    textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                    '&:hover': {
+                      background: `linear-gradient(135deg, ${alpha(theme.palette.primary.dark, 0.8)} 0%, ${alpha(theme.palette.primary.dark, 0.7)} 100%)`,
+                      transform: 'scale(1.02)'
+                    }
                   }}
                 >
-                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
-                    {builder.name.split(' ').map(word => word[0]).join('')}
-                  </Typography>
-                </CardMedia>
-                <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                  <Typography variant="h6" component="div" noWrap sx={{ mb: 1, fontSize: '1rem' }}>
-                    {builder.name}
-                  </Typography>
+                  {builder.name}
+                </Box>
+                <CardContent sx={{ flexGrow: 1, p: 1.5 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <Rating value={builder.rating} precision={0.5} size="small" readOnly />
-                    <Typography variant="body2" color="text.secondary" sx={{ ml: 0.5 }}>
-                      ({builder.reviewCount})
+                    <LocationOnIcon sx={{ fontSize: '1rem', mr: 0.5 }} />
+                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem' }}>
+                      {builder.location.city}, {builder.location.state}
                     </Typography>
                   </Box>
-                  <Typography variant="body2" color="text.secondary" noWrap>
-                    {builder.location.city}, {builder.location.state}
-                  </Typography>
-                  <Box sx={{ mt: 1 }}>
-                    {builder.priceRange && (
-                      <Chip 
-                        label={`$${builder.priceRange.min.toLocaleString()} - $${builder.priceRange.max.toLocaleString()}`}
-                        size="small"
-                        variant="outlined"
-                        sx={{ fontSize: '0.7rem' }}
-                      />
-                    )}
-                  </Box>
+                  
+                  {/* Van Types */}
+                  {builder.vanTypes && builder.vanTypes.length > 0 && (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+                      {builder.vanTypes.slice(0, 2).map((vanType: string) => (
+                        <Chip 
+                          key={vanType} 
+                          label={vanType} 
+                          size="small" 
+                          variant="outlined" 
+                          color="primary"
+                          sx={{ fontSize: '0.65rem', height: '20px' }}
+                        />
+                      ))}
+                    </Box>
+                  )}
+                  
+                  {/* Services */}
+                  {builder.services && builder.services.length > 0 && (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {builder.services.slice(0, 2).map((service: string) => (
+                        <Chip 
+                          key={service} 
+                          label={service} 
+                          size="small" 
+                          variant="outlined" 
+                          color="secondary"
+                          sx={{ fontSize: '0.65rem', height: '20px' }}
+                        />
+                      ))}
+                    </Box>
+                  )}
                 </CardContent>
               </CardActionArea>
             </Card>

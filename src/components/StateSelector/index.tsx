@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FormControl, 
   InputLabel, 
@@ -24,10 +24,15 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PublicIcon from '@mui/icons-material/Public';
 import SearchIcon from '@mui/icons-material/Search';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
+import BusinessIcon from '@mui/icons-material/Business';
 
 interface StateSelectorProps {
   onSelectState: (state: string) => void;
   onSelectZipCode?: (zipCode: string) => void;
+  onSelectBuilderName?: (builderName: string) => void;
+  selectedState?: string;
+  selectedBuilderName?: string;
+  selectedZipCode?: string;
 }
 
 interface StateInfo {
@@ -162,11 +167,13 @@ const StateMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
-const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZipCode }) => {
-  const [state, setState] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [searchMethod, setSearchMethod] = useState(0); // 0 = state, 1 = zip code
+const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZipCode, onSelectBuilderName, selectedState, selectedBuilderName, selectedZipCode }) => {
+  const [state, setState] = useState(selectedState || '');
+  const [zipCode, setZipCode] = useState(selectedZipCode || '');
+  const [searchMethod, setSearchMethod] = useState(0); // 0 = state, 1 = zip code, 2 = builder name
+  const [builderName, setBuilderName] = useState(selectedBuilderName || '');
   const zipCodeInputRef = React.useRef<HTMLInputElement>(null);
+  const builderNameInputRef = React.useRef<HTMLInputElement>(null);
   
   const handleZipCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // Only allow numeric input up to 5 digits
@@ -187,26 +194,60 @@ const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZi
     }
   };
   
+  const handleBuilderNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBuilderName(event.target.value);
+  };
+  
+  const handleBuilderNameSearch = () => {
+    if (builderName && onSelectBuilderName) {
+      onSelectBuilderName(builderName);
+    }
+  };
+  
+  const handleBuilderNameKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && builderName && onSelectBuilderName) {
+      event.preventDefault();
+      onSelectBuilderName(builderName);
+    }
+  };
+  
   const handleSearchMethodChange = (event: React.SyntheticEvent, newValue: number) => {
     setSearchMethod(newValue);
     
     // Clear previous selections when switching methods
     if (newValue === 0) {
       setZipCode('');
+      setBuilderName('');
       if (onSelectZipCode) {
         onSelectZipCode('');
+      }
+      if (onSelectBuilderName) {
+        onSelectBuilderName('');
+      }
+    } else if (newValue === 1) {
+      setState('');
+      onSelectState('');
+      setBuilderName('');
+      if (onSelectBuilderName) {
+        onSelectBuilderName('');
       }
     } else {
       setState('');
       onSelectState('');
-      
-      // Focus the zip code input field when switching to zip code tab
-      setTimeout(() => {
-        if (zipCodeInputRef.current) {
-          zipCodeInputRef.current.focus();
-        }
-      }, 100);
+      setZipCode('');
+      if (onSelectZipCode) {
+        onSelectZipCode('');
+      }
     }
+    
+    // Focus the input field when switching to zip code or builder name tab
+    setTimeout(() => {
+      if (newValue === 1 && zipCodeInputRef.current) {
+        zipCodeInputRef.current.focus();
+      } else if (newValue === 2 && builderNameInputRef.current) {
+        builderNameInputRef.current.focus();
+      }
+    }, 100);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -214,6 +255,19 @@ const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZi
     setState(selectedState);
     onSelectState(selectedState);
   };
+
+  // Sync internal state with props when they change
+  useEffect(() => {
+    setState(selectedState || '');
+  }, [selectedState]);
+
+  useEffect(() => {
+    setBuilderName(selectedBuilderName || '');
+  }, [selectedBuilderName]);
+
+  useEffect(() => {
+    setZipCode(selectedZipCode || '');
+  }, [selectedZipCode]);
 
   return (
     <Box sx={{ width: '100%', maxWidth: 400, mx: 'auto', mb: 4 }}>
@@ -270,6 +324,11 @@ const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZi
           <Tab 
             label="By Zip Code" 
             icon={<MyLocationIcon />} 
+            iconPosition="start"
+          />
+          <Tab 
+            label="By Builder Name" 
+            icon={<BusinessIcon />} 
             iconPosition="start"
           />
         </Tabs>
@@ -334,7 +393,7 @@ const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZi
               />
             )}
           </>
-        ) : (
+        ) : searchMethod === 1 ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
               fullWidth
@@ -369,7 +428,7 @@ const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZi
               fullWidth
               startIcon={<SearchIcon />}
               onClick={handleZipCodeSearch}
-              disabled={zipCode.length !== 5}
+              disabled={!zipCode}
               sx={{ 
                 py: 1.5, 
                 borderRadius: 2,
@@ -381,13 +440,77 @@ const StateSelector: React.FC<StateSelectorProps> = ({ onSelectState, onSelectZi
               Search by Zip Code
             </Button>
             
-            {zipCode.length === 5 && onSelectZipCode && (
+            {zipCode && onSelectZipCode && (
               <Chip 
                 label={`Searching: ${zipCode}`}
                 color="primary"
                 variant="outlined"
                 onDelete={() => {
                   setZipCode('');
+                  if (onSelectZipCode) {
+                    onSelectZipCode('');
+                  }
+                }}
+                sx={{ mt: 1, borderRadius: 8, py: 0.5, alignSelf: 'flex-start' }}
+              />
+            )}
+          </Box>
+        ) : (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <TextField
+              fullWidth
+              label="Enter Builder Name"
+              variant="outlined"
+              value={builderName}
+              onChange={handleBuilderNameChange}
+              onKeyDown={handleBuilderNameKeyDown}
+              placeholder="e.g. Builder Name"
+              inputRef={builderNameInputRef}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <BusinessIcon color="primary" />
+                  </InputAdornment>
+                ),
+                sx: {
+                  borderRadius: 2,
+                  '&:hover': {
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+                  },
+                }
+              }}
+              helperText="Press Enter or click Search"
+            />
+            
+            <Button 
+              variant="contained" 
+              color="primary"
+              size="large"
+              fullWidth
+              startIcon={<SearchIcon />}
+              onClick={handleBuilderNameSearch}
+              disabled={!builderName}
+              sx={{ 
+                py: 1.5, 
+                borderRadius: 2,
+                textTransform: 'none',
+                fontWeight: 600,
+                fontSize: '1rem'
+              }}
+            >
+              Search by Builder Name
+            </Button>
+            
+            {builderName && onSelectBuilderName && (
+              <Chip 
+                label={`Searching: ${builderName}`}
+                color="primary"
+                variant="outlined"
+                onDelete={() => {
+                  setBuilderName('');
+                  if (onSelectBuilderName) {
+                    onSelectBuilderName('');
+                  }
                 }}
                 sx={{ mt: 1, borderRadius: 8, py: 0.5, alignSelf: 'flex-start' }}
               />

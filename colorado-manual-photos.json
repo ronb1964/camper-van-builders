@@ -1,0 +1,75 @@
+{
+  "coloradoBuilderPhotos": {
+    "The Vansmith": {
+      "website": "https://thevansmith.com/",
+      "photos": [
+        {
+          "url": "https://thevansmith.com/wp-content/uploads/2023/vansmith-sprinter-exterior.jpg",
+          "alt": "The Vansmith custom Sprinter van conversion exterior",
+          "caption": "Custom Mercedes Sprinter conversion by The Vansmith"
+        },
+        {
+          "url": "https://thevansmith.com/wp-content/uploads/2023/vansmith-interior-kitchen.jpg", 
+          "alt": "The Vansmith van conversion interior kitchen",
+          "caption": "Handcrafted kitchen interior by The Vansmith"
+        }
+      ],
+      "domains": ["thevansmith.com"]
+    },
+    "Titan Vans": {
+      "website": "https://www.titanvans.com/",
+      "photos": [
+        {
+          "url": "https://www.titanvans.com/images/titan-van-exterior.jpg",
+          "alt": "Titan Vans rugged camper van conversion",
+          "caption": "Rugged and reliable camper van by Titan Vans"
+        },
+        {
+          "url": "https://www.titanvans.com/images/titan-van-interior.jpg",
+          "alt": "Titan Vans modular interior design",
+          "caption": "Modular interior design by Titan Vans"
+        }
+      ],
+      "domains": ["titanvans.com"]
+    },
+    "Boulder Campervans": {
+      "website": "https://www.bouldercampervans.com/",
+      "photos": [
+        {
+          "url": "https://www.bouldercampervans.com/images/boulder-custom-van.jpg",
+          "alt": "Boulder Campervans custom conversion",
+          "caption": "Completely custom van conversion by Boulder Campervans"
+        }
+      ],
+      "domains": ["bouldercampervans.com"]
+    },
+    "Viking Van Customs": {
+      "website": "https://vikingvancustoms.com/",
+      "photos": [
+        {
+          "url": "https://vikingvancustoms.com/wp-content/uploads/2023/viking-luxury-sprinter.jpg",
+          "alt": "Viking Van Customs luxury Mercedes Sprinter",
+          "caption": "Luxury Mercedes Sprinter conversion by Viking Van Customs"
+        },
+        {
+          "url": "https://vikingvancustoms.com/wp-content/uploads/2023/viking-custom-interior.jpg",
+          "alt": "Viking Van Customs premium interior",
+          "caption": "Premium custom interior by Viking Van Customs"
+        }
+      ],
+      "domains": ["vikingvancustoms.com"]
+    },
+    "Flippin Vans": {
+      "website": "https://www.flippinvans.com/",
+      "photos": [
+        {
+          "url": "https://www.flippinvans.com/images/flippin-van-build.jpg",
+          "alt": "Flippin Vans custom build project",
+          "caption": "Custom van build by Flippin Vans"
+        }
+      ],
+      "domains": ["flippinvans.com"]
+    }
+  },
+  "note": "These are placeholder photo URLs. In production, we would extract real photos from the websites using Puppeteer or manual verification. For now, galleries will remain empty until authentic photos are verified."
+}

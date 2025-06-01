@@ -1,0 +1,88 @@
+{
+  "builder": "Outpost Vans",
+  "website": "https://www.outpostvans.com/",
+  "extractedAt": "2025-06-01T10:58:33.122Z",
+  "totalImages": 10,
+  "images": [
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Mcpherson_Promaster-1920w.jpg",
+      "alt": "a van is shown from three different angles on a white background .",
+      "width": 1920,
+      "height": 1336,
+      "className": "",
+      "id": "1776027920"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+144+Sprinter+-+Exterior+02-1920w.png",
+      "alt": "a 3d model of a van with a ladder on the roof .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1093398346"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+144+Sprinter+-+Interior+02-1920w.png",
+      "alt": "an aerial view of a van with a kitchen and a table .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1217769387"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+-+KNOWLTON170_Exterior+02_RevB-1920w.png",
+      "alt": "an aerial view of a van with a solar panel on the roof .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1816093525"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+-+KNOWLTON170_Interior+01_RevB-1920w.png",
+      "alt": "an isometric view of a camper van with a bed and a table .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1563894250"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+-+KNOWLTON170_Exterior+01_RevB-1920w.png",
+      "alt": "a gray van with a ladder on the roof on a white background .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1599143742"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+-+KNOWLTON170_Interior+04_RevB-1920w.png",
+      "alt": "a 3d model of a van with its doors open and a bed in the back .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1216111303"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+-+KNOWLTON170_Interior+05_RevB-1920w.png",
+      "alt": "the inside of a van with a couch , table , and window .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1925826879"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+144+Sprinter+-+Exterior+01-1920w.png",
+      "alt": "a gray van with a solar panel on the roof .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1812877141"
+    },
+    {
+      "src": "https://lirp.cdn-website.com/8104eb4b/dms3rep/multi/opt/Outpost+Vans+144+Sprinter+-+Interior+01-2-1920w.png",
+      "alt": "an aerial view of a van with a bed in the back .",
+      "width": 1920,
+      "height": 1080,
+      "className": "",
+      "id": "1341995759"
+    }
+  ]
+}

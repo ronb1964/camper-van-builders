@@ -1,0 +1,103 @@
+{
+  "builder": "Papago Vans",
+  "website": "https://papagovans.com",
+  "specialties": [
+    "RVIA Certified",
+    "Luxury Builds",
+    "Adventure-Ready"
+  ],
+  "timestamp": "2025-06-01T09:24:19.249Z",
+  "targetPhotos": 8,
+  "totalFound": 41,
+  "uniqueSelected": 8,
+  "images": [
+    {
+      "src": "https://papagovans.com/wp-content/uploads/2025/04/12-JMO_7307-scaled.jpg",
+      "alt": "",
+      "title": "",
+      "width": 2560,
+      "height": 1704,
+      "className": "attachment-full size-full wp-post-image",
+      "parentText": "",
+      "dataSrc": "",
+      "srcset": ""
+    },
+    {
+      "src": "https://papagovans.com/wp-content/uploads/2024/12/45-2024-12-12-14-1-scaled.jpg",
+      "alt": "",
+      "title": "",
+      "width": 2560,
+      "height": 1703,
+      "className": "attachment-full size-full wp-post-image",
+      "parentText": "",
+      "dataSrc": "",
+      "srcset": ""
+    },
+    {
+      "src": "https://papagovans.com/wp-content/uploads/2024/12/2-2024-12-11-14-scaled.jpg",
+      "alt": "",
+      "title": "",
+      "width": 2560,
+      "height": 1703,
+      "className": "attachment-full size-full wp-post-image",
+      "parentText": "",
+      "dataSrc": "",
+      "srcset": ""
+    },
+    {
+      "src": "https://papagovans.com/wp-content/uploads/2025/04/4-2025-03-12-11-scaled.jpg",
+      "alt": "",
+      "title": "",
+      "width": 2560,
+      "height": 1703,
+      "className": "attachment-full size-full wp-post-image",
+      "parentText": "",
+      "dataSrc": "",
+      "srcset": ""
+    },
+    {
+      "src": "https://papagovans.com/wp-content/uploads/2023/06/zion-1.png",
+      "alt": "",
+      "title": "",
+      "width": 2500,
+      "height": 1398,
+      "className": "attachment-full size-full wp-image-3523",
+      "parentText": "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t",
+      "dataSrc": "",
+      "srcset": "https://papagovans.com/wp-content/uploads/2023/06/zion-1.png 2500w, https://papagovans.com/wp-content/uploads/2023/06/zion-1-300x168.png 300w, https://papagovans.com/wp-content/uploads/2023/06/zion-1-1024x573.png 1024w, https://papagovans.com/wp-content/uploads/2023/06/zion-1-768x429.png 768w, https://papagovans.com/wp-content/uploads/2023/06/zion-1-1536x859.png 1536w, https://papagovans.com/wp-content/uploads/2023/06/zion-1-2048x1145.png 2048w"
+    },
+    {
+      "src": "https://papagovans.com/wp-content/uploads/2023/06/Mammoth-Build-1-1-1.png",
+      "alt": "",
+      "title": "",
+      "width": 2500,
+      "height": 1325,
+      "className": "attachment-full size-full wp-image-3258",
+      "parentText": "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t",
+      "dataSrc": "",
+      "srcset": "https://papagovans.com/wp-content/uploads/2023/06/Mammoth-Build-1-1-1.png 2500w, https://papagovans.com/wp-content/uploads/2023/06/Mammoth-Build-1-1-1-300x159.png 300w, https://papagovans.com/wp-content/uploads/2023/06/Mammoth-Build-1-1-1-1024x543.png 1024w, https://papagovans.com/wp-content/uploads/2023/06/Mammoth-Build-1-1-1-768x407.png 768w, https://papagovans.com/wp-content/uploads/2023/06/Mammoth-Build-1-1-1-1536x814.png 1536w, https://papagovans.com/wp-content/uploads/2023/06/Mammoth-Build-1-1-1-2048x1085.png 2048w"
+    },
+    {
+      "src": "https://papagovans.com/wp-content/uploads/2023/06/El_Capitan-2-1-1.png",
+      "alt": "<a href=\"/el-capitan/\">Learn More</a>",
+      "title": "",
+      "width": 2500,
+      "height": 946,
+      "className": "",
+      "parentText": "\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t",
+      "dataSrc": "",
+      "srcset": ""
+    },
+    {
+      "src": "https://papagovans.com/wp-content/uploads/2023/06/papago-vans-white-PNG-1.png",
+      "alt": "",
+      "title": "",
+      "width": 1919,
+      "height": 1188,
+      "className": "attachment-full size-full wp-image-9845",
+      "parentText": "\n\t\t\t\t\t\t\t",
+      "dataSrc": "",
+      "srcset": "https://papagovans.com/wp-content/uploads/2023/06/papago-vans-white-PNG-1.png 2544w, https://papagovans.com/wp-content/uploads/2023/06/papago-vans-white-PNG-1-300x186.png 300w, https://papagovans.com/wp-content/uploads/2023/06/papago-vans-white-PNG-1-1024x634.png 1024w, https://papagovans.com/wp-content/uploads/2023/06/papago-vans-white-PNG-1-768x475.png 768w, https://papagovans.com/wp-content/uploads/2023/06/papago-vans-white-PNG-1-1536x951.png 1536w, https://papagovans.com/wp-content/uploads/2023/06/papago-vans-white-PNG-1-2048x1268.png 2048w"
+    }
+  ]
+}

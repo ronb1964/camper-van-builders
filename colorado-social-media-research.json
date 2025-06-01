@@ -1,0 +1,29 @@
+{
+  "coloradoBuildersSocialMedia": {
+    "theVansmith": {
+      "instagram": "https://www.instagram.com/the_vansmith/",
+      "facebook": "https://www.facebook.com/TheVansmithCO/",
+      "youtube": null
+    },
+    "titanVans": {
+      "instagram": "https://www.instagram.com/titanvans/",
+      "facebook": "https://www.facebook.com/titanvans/",
+      "youtube": "https://www.youtube.com/titanvans"
+    },
+    "boulderCampervans": {
+      "instagram": "https://www.instagram.com/bouldercampervans/",
+      "facebook": "https://www.facebook.com/BoulderCampervans/",
+      "youtube": null
+    },
+    "vikingVanCustoms": {
+      "instagram": "https://www.instagram.com/vikingvancustoms/",
+      "facebook": "https://www.facebook.com/vikingvancustoms/",
+      "youtube": null
+    },
+    "flippinVans": {
+      "instagram": "https://www.instagram.com/flippinvans/",
+      "facebook": "https://www.facebook.com/FlippinVans/",
+      "youtube": null
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "builder": "Vanquest Alaska",
+  "website": "https://vanquestak.com",
+  "timestamp": "2025-06-01T09:07:04.959Z",
+  "currentPhotos": 1,
+  "targetPhotos": 8,
+  "totalFound": 18,
+  "uniqueSelected": 8,
+  "images": [
+    {
+      "src": "https://vanquestak.com/wp-content/uploads/2021/06/IMG_4931.jpg",
+      "alt": "",
+      "title": "IMG_4931",
+      "width": 2048,
+      "height": 1365,
+      "className": "wp-image-555",
+      "parentText": ""
+    },
+    {
+      "src": "https://vanquestak.com/wp-content/uploads/2022/07/Ophira-Van-Conversion-Anchorage-Alaska-4-400x250.jpg",
+      "alt": "Babe",
+      "title": "",
+      "width": 1600,
+      "height": 1000,
+      "className": "",
+      "parentText": ""
+    },
+    {
+      "src": "https://vanquestak.com/wp-content/uploads/2022/07/Ophira-Van-Conversion-Anchorage-Alaska-4-1080x720.jpg",
+      "alt": "Babe",
+      "title": "",
+      "width": 1080,
+      "height": 719,
+      "className": "",
+      "parentText": "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
+    },
+    {
+      "src": "https://vanquestak.com/wp-content/uploads/2021/05/312412.jpg",
+      "alt": "",
+      "title": "312412",
+      "width": 800,
+      "height": 600,
+      "className": "wp-image-220",
+      "parentText": ""
+    },
+    {
+      "src": "https://vanquestak.com/wp-content/uploads/2021/05/2312412.jpg",
+      "alt": "",
+      "title": "",
+      "width": 720,
+      "height": 420,
+      "className": "",
+      "parentText": "\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\tVans For Sale\n\t\t\t\t\t\t\t\t\t\tRegister your email to be the first t"
+    },
+    {
+      "src": "https://vanquestak.com/wp-content/uploads/2021/05/21412.jpg",
+      "alt": "",
+      "title": "",
+      "width": 720,
+      "height": 420,
+      "className": "",
+      "parentText": "\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\tPROVEN FLOOR PLANS\n\t\t\t\t\t\t\t\t\t\tPick a floor plan that has been "
+    },
+    {
+      "src": "https://vanquestak.com/wp-content/uploads/2021/05/231321.jpg",
+      "alt": "",
+      "title": "",
+      "width": 720,
+      "height": 420,
+      "className": "",
+      "parentText": "\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\tFULLY CUSTOM DESIGN\n\t\t\t\t\t\t\t\t\t\tA truly unique van developed th"
+    },
+    {
+      "src": "https://vanquestak.com/wp-content/uploads/2021/05/IMG_5653-400x250.jpg",
+      "alt": "The Family Weekend",
+      "title": "",
+      "width": 515,
+      "height": 322,
+      "className": "",
+      "parentText": ""
+    }
+  ]
+}
