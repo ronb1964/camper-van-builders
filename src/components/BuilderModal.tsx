@@ -102,9 +102,6 @@ interface BuilderModalProps {
 }
 
 const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) => {
-  // Early return must come before any hooks
-  if (!builder) return null;
-
   const [activeTab, setActiveTab] = useState(0);
   const [mainImage, setMainImage] = useState('');
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
@@ -121,6 +118,18 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
     }
   }, [builder]);
 
+  useEffect(() => {
+    if (builder?.gallery) {
+      console.log('🖼️ Gallery Debug:', { 
+        builderName: builder.name, 
+        galleryLength: (builder.gallery || []).length, 
+        galleryItems: builder.gallery 
+      });
+    }
+  }, [builder?.gallery, builder?.name]);
+
+  if (!builder) return null;
+
   const {
     name,
     location,
@@ -134,16 +143,6 @@ const BuilderModal: React.FC<BuilderModalProps> = ({ builder, open, onClose }) =
     amenities,
     gallery
   } = builder;
-
-  useEffect(() => {
-    if (gallery) {
-      console.log('🖼️ Gallery Debug:', { 
-        builderName: name, 
-        galleryLength: (gallery || []).length, 
-        galleryItems: gallery 
-      });
-    }
-  }, [gallery, name]);
 
   // Gallery navigation functions
   const validGalleryImages = ((gallery || []) as (string | GalleryImage)[])

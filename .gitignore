@@ -58,3 +58,6 @@ expand-*.js
 
 # Windsurf deployment files (keep for deployment)
 !windsurf_deployment.yaml
+
+# Local Netlify folder
+.netlify
